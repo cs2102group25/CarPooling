@@ -2,7 +2,7 @@
 <head> <title>CS2102 Car Pooling</title> <link rel="stylesheet" type="text/css" href="style.css"></head>
 <body>
 <table>
-<tr> <td colspan="2" style="background-color:#FFA500;">
+<tr> <td colspan="2" class="header">
 <h1>Trips available</h1>
 </td> </tr>
 <tr>
@@ -24,7 +24,7 @@ if (isset($_POST['sel'])) {
     if ($result == true) {
         echo "Trip(s) deleted";
     } else {
-        echo "Trip(s) not added";
+        echo "Trip(s) not deleted";
     }
 }
 ?>
@@ -75,7 +75,7 @@ Note <input type=text name=note><br>
 pg_close($dbconn);
 ?>
 <tr>
-<td colspan="2" style="background-color:#FFA500; text-align:center;"> Copyright &#169; CS2102
+<td colspan="2" class="footer"> Copyright &#169; CS2102
 </td> </tr>
 </table>
 </body>

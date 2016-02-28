@@ -1,15 +1,19 @@
 .result {
-	border-top: 1px solid black;
-	border-left: 1px solid black;
-	border-right: 1px solid black;
-	border-bottom: 1px solid black;
+	border: 1px solid #000 !important;
+	text-align: center;
+}
+
+.resultTable {
+	width: 100%;
 }
 
 .header {
-	background-color:#FFA500;
+	background-color: #FFA500;
+	padding: 5 5 5 5;
+	vertical-align: text-bottom;
 }
 
 .footer {
-	background-color:#FFA500;
+	background-color: #FFA500;
 	text-align:center;
 }

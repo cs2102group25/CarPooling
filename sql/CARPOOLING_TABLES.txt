@@ -1,0 +1,47 @@
+CREATE TABLE Profile (
+	profile_id INT NOT NULL,
+	email VARCHAR(255) UNIQUE NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	name VARCHAR(255) NOT NULL,
+	dob date NOT NULL,
+	credit_card_num int NOT NULL,
+	card_holder_name varchar(255) NOT NULL,
+	acc_balance DECIMAL(40, 3) DEFAULT 0 CHECK (acc_balance >= 0),
+	admin INT NOT NULL DEFAULT 0 CHECK (admin=0 OR admin=1),
+	PRIMARY KEY(profile_id)
+);
+
+
+CREATE TABLE Vehicle (
+	plate_no VARCHAR(16) NOT NULL,
+	profile_id INT,
+	type VARCHAR(255),
+	num_seats INT NOT NULL CHECK (num_seats > 0),
+	PRIMARY KEY(plate_no),
+	CONSTRAINT profileid
+		FOREIGN KEY(profile_id) REFERENCES Profile(profile_id)
+);
+
+CREATE TABLE Trip (	
+	trip_id INT NOT NULL,
+	pick_up VARCHAR(255) NOT NULL,
+	drop_off VARCHAR(255) NOT NULL,
+	price DECIMAL(10, 2) NOT NULL CHECK(price >= 0),
+	seat_available INT NOT NULL CHECK (seat_available >= 0),
+	date date NOT NULL,
+	plate_no VARCHAR(16),
+	PRIMARY KEY(trip_id),
+	CONSTRAINT plateno
+		FOREIGN KEY(plate_no) REFERENCES Vehicle(plate_no)
+);
+
+CREATE TABLE Booking (
+	profile_id INT,
+	trip_id INT,
+	receipt_no VARCHAR(32) UNIQUE NOT NULL,
+	PRIMARY KEY(profile_id, trip_id),
+	CONSTRAINT profileid
+		FOREIGN KEY(profile_id) REFERENCES Profile(profile_id),
+	CONSTRAINT tripid
+		FOREIGN KEY(trip_id) REFERENCES Trip(trip_id)
+);

@@ -1,19 +1,40 @@
+body {
+	margin: 0px !important;
+}
+
 .result {
-	border: 1px solid #000 !important;
+	border-left: 1px solid #000 !important;
+	border-bottom: 1px solid #000 !important;
 	text-align: center;
 }
 
+.row {
+	display: flex !important;
+}
+
 .resultTable {
+	padding: 30px !important;
 	width: 100%;
+	background-color: white;
+	padding: 30px;
+	display: block;
+}
+
+.container {
+	border-right: 1px solid #000 !important;;
+	border-top: 1px solid #000 !important;
 }
 
 .header {
-	background-color: #FFA500;
-	padding: 5 5 5 5;
+	background-color: black;
+	color: white;
+	padding: 10px ;
 	vertical-align: text-bottom;
+	overflow: hidden;
 }
 
 .footer {
-	background-color: #FFA500;
+	background-color: black;
+	color: white;
 	text-align:center;
 }

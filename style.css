@@ -20,8 +20,17 @@ body {
 	display: block;
 }
 
+.addTrip {
+	border-left: 1px solid #000 !important;
+	border-bottom: 1px solid #000 !important;
+	border-right: 1px solid #000 !important;
+	border-top: 1px solid #000 !important;
+    width: 50% !important;
+    text-align: left !important;
+}
+
 .container {
-	border-right: 1px solid #000 !important;;
+	border-right: 1px solid #000 !important;
 	border-top: 1px solid #000 !important;
 }
 

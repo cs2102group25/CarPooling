@@ -12,22 +12,22 @@ if (isset($_POST['login'])) {
         $userQuery = "SELECT * FROM \"user\" WHERE email='$email'";
         $userResult = pg_query($userQuery);
 		if (!$userResult) exit("Error logging in.");
-        if (pg_num_rows($userResult) == 0) exit("Email not found.<br/>");
-        
-		$loginQuery = "SELECT admin FROM \"user\" WHERE email='$email' AND
-        password='$password'";
-		$loginResult = pg_query($loginQuery);
-		if (!$loginResult) exit("Error logging in.");
-        if (pg_num_rows($loginResult) == 0) exit("Incorrect password.<br/>");
-        
-		$row = pg_fetch_row($loginResult);
-        $_SESSION['email'] = $email;
-        $db_admin = $row[0];
+        if (pg_num_rows($userResult) != 0) {
+            $loginQuery = "SELECT admin FROM \"user\" WHERE email='$email' AND
+            password='$password'";
+            $loginResult = pg_query($loginQuery);
+            if (!$loginResult) exit("Error logging in.");
+            if (pg_num_rows($loginResult) > 0) {
+                $row = pg_fetch_row($loginResult);
+                $_SESSION['email'] = $email;
+                $db_admin = $row[0];
 
-        if ($db_admin == 0) {
-            directToHomePage();
-        } else if($db_admin == 1) {
-            directToAdminPage();
+                if ($db_admin == 0) {
+                    directToHomePage();
+                } else if($db_admin == 1) {
+                    directToAdminPage();
+                }
+            }
         }
 	}
 }
@@ -49,6 +49,13 @@ pg_close($dbconn);
 		</td> </tr>
 		<tr>
 			<td style="background‐color:#00FF00;">
+                <?php
+                if (pg_num_rows($userResult) == 0) {
+                    echo 'Username not found.';
+                } else if (!$loginResult == 0) {
+                    echo 'Incorrect password.';
+                }
+                ?>
 				<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 					Email: <input type="text" name="email" id="email" placeholder="User Name">
 					<br>

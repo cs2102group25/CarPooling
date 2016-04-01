@@ -1,6 +1,8 @@
-<?php require_once '/php/sqlconn.php';
-	require_once 'libs.php';
-
+<?php 
+echo dirname(__FILE__);
+define(realpath(dirname(__FILE__)) . "php/sqlconn.php"); 
+//require_once __ROOT__.'/php/sqlconn.php'; 
+//require_once 'libs.php';
 session_start();
 
 if(isset($_POST['login'])){

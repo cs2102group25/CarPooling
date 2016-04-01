@@ -1,30 +1,27 @@
-<?php require_once '/php/sqlconn.php';
-	require_once 'libs.php';
-	session_start();
+<?php 
+require_once 'php/sqlconn.php';
+require_once 'libs.php';
+session_start();
 
-if(isset($_POST['sign-up'], $_POST['email'], $_POST['password'], $_POST['first-name'], $_POST['last-name'], 
-	$_POST['credit-card-num'], $_POST['acc-balance'], $_POST['admin'])){
-	$rows = countingRows("profile");
-
-	$query = "INSERT INTO profile(profile_id, email, password, first_name, last_name, credit_card_num, acc_balance, admin)
-	VALUES(".($rows + 1).", '".$_POST['email']."', '".$_POST['password']."', '".$_POST['first-name']."', '".$_POST['last-name']."', "
-	.$_POST['credit-card-num'].", ".$_POST['acc-balance'].", ".$_POST['admin'].")";
-
-	$result = pg_query($query) or die('Query failed: '.pg_last_error());
+if(isset($_POST['sign-up'], $_POST['email'], $_POST['password'], $_POST['username'])) {
+    
+    $adminVal = var_export($_POST['admin'] == admin, true);
+	$query = "INSERT INTO \"user\"(email, username, password, admin)
+	VALUES('".$_POST['email']."', '".$_POST['username']."', '".$_POST['password']."', '".$adminVal."');";
+	$result = pg_query($query);
 	if ($result) {
-		echo "New user added";
-		$_SESSION['user_name'] = $_POST['email'];
+		$_SESSION['username'] = $_POST['username'];
 		$_SESSION['password'] = $_POST['password'];
 		directToHomePage();
 	} else {
-		echo "User not added";
+		echo "Error adding user!";
 	}
+} else {
+    echo "Fill in the following information to sign up";
 }
 
 pg_close($dbconn);
 ?>
-
-
 
 <!DOCTYPE html>
 <html>
@@ -34,22 +31,16 @@ pg_close($dbconn);
 </head>
 
 <body>
-	<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-		Email : <input type="text" name="email" id="username" placeholder="Email">
-		<br>
-		Password: <input type="password" name="password" id="password" placeholder="Password">
-		<br>
-		First name: <input type="text" name="first-name" id="first-name" placeholder="First Name">
-		<br>
-		Last name: <input type="text" name="last-name" id="last-name" placeholder="Last Name">
-		<br>
-		Credit card number: <input type="text" name="credit-card-num" id="card-no">
-		<br>
-		Account Balance: <input type="text" name="acc-balance" id="acc-bal" placeholder="Account Balance">
-		<br>
-		Admin <input type="number" name="admin" id="admin" value="0" max="1" min="0">
-		<br>
-		  	<input type="submit" name="sign-up" value="Sign up">
+	<form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+		Email : <input type="text" name="email" id="email" placeholder="Email"/>
+		<br/>
+        Username : <input type="text" name="username" id="username" placeholder="Username"/>
+		<br/>
+		Password: <input type="password" name="password" id="password" placeholder="Password"/>
+		<br/>
+		<input type="checkbox" name="admin" value="admin"/> Admin 
+		<br/>
+        <input type="submit" name="sign-up" value="Sign up"/>
 	</form>
 </body>
 </html>

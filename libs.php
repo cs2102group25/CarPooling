@@ -1,4 +1,5 @@
-<?php require_once '/php/sqlconn.php';
+<?php 
+require_once 'php/sqlconn.php';
 session_start();
 
 /*----------------All the commonly-used functions're added here--------------------------*/

@@ -11,22 +11,21 @@ if (isset($_POST['login'])) {
 
         $userQuery = "SELECT * FROM \"user\" WHERE email='$email'";
         $userResult = pg_query($userQuery);
-		if(!$userResult) exit("Error logging in.");
-        if (pg_num_rows($userResult) == 0) echo "Email not found.<br/>";
+		if (!$userResult) exit("Error logging in.");
+        if (pg_num_rows($userResult) == 0) exit("Email not found.<br/>");
         
 		$loginQuery = "SELECT admin FROM \"user\" WHERE email='$email' AND
         password='$password'";
-        echo $loginQuery;
 		$loginResult = pg_query($loginQuery);
-		if(!$loginResult) exit("Error logging in.");
-        if (pg_num_rows($loginResult) == 0) echo "Incorrect password.<br/>";
+		if (!$loginResult) exit("Error logging in.");
+        if (pg_num_rows($loginResult) == 0) exit("Incorrect password.<br/>");
         
 		$row = pg_fetch_row($loginResult);
         $_SESSION['email'] = $email;
         $db_admin = $row[0];
 
         if ($db_admin == 0) {
-            directToProfilePage();
+            directToHomePage();
         } else if($db_admin == 1) {
             directToAdminPage();
         }

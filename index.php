@@ -9,8 +9,8 @@
 	<div class="header">
 		<div style="float:left; font-size:4vmin;"><b>Trips available</b></div>
     <div style="float:right;">
-      <button type="button" class="btn btn-info btn-lg" id="login-btn">Login</button>
-      <button type="button" class="btn btn-info btn-lg" id="signup-btn">Sign up</button>
+      <button type="button" class="btn btn-info btn-lg" id="login-btn" onclick="location.href='login.php'">Login</button>
+      <button type="button" class="btn btn-info btn-lg" id="signup-btn" onclick="location.href='signup.php'">Sign up</button>
     </div>
 	</div>
 
@@ -22,7 +22,7 @@
                  <input type="submit" name="searchForTrip" value="Search">
         </form>
         <form method='post'>
-          <?php require_once '/php/sqlconn.php';
+          <?php require_once 'php/sqlconn.php';
           $arrayTitle = ["From", "To", "When", "Duration", "No. Seats", "By", "Price", "Plate no", "Actions"];
 
           $query;
@@ -78,10 +78,10 @@
       <input type="submit" name="add" value="Add">
     </form>
 
-    <?php require_once '/php/sqlconn.php';
+    <?php require_once 'php/sqlconn.php';
         require_once 'libs.php';
 
-        if(!isset($_SESSION['user_name'], $_SESSION['password'])) {
+        if(!isset($_SESSION['email'], $_SESSION['password'])) {
           exit;
         }
 

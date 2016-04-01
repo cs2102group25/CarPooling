@@ -1,46 +1,35 @@
 <?php 
-echo dirname(__FILE__);
-define(realpath(dirname(__FILE__)) . "php/sqlconn.php"); 
-//require_once __ROOT__.'/php/sqlconn.php'; 
-//require_once 'libs.php';
+require_once 'php/sqlconn.php';
+require_once 'libs.php';
+require_once 'redirectIfLogin.php';
 session_start();
 
-if(isset($_POST['login'])){
-	if(isset($_POST['username']) && isset($_POST['password'])) {
-		$user_name = $_POST['username'];
+if (isset($_POST['login'])) {
+	if (isset($_POST['email']) && isset($_POST['password'])) {
+		$email = $_POST['email'];
 		$password = $_POST['password'];
 
-		$loginQuery = "SELECT email, password, admin FROM profile WHERE email='".$user_name."'";
-		$res = pg_query($loginQuery);
-		if(!$res) exit("There's error in login");
+        $userQuery = "SELECT * FROM \"user\" WHERE email='$email'";
+        $userResult = pg_query($userQuery);
+		if(!$userResult) exit("Error logging in.");
+        if (pg_num_rows($userResult) == 0) echo "Email not found.<br/>";
+        
+		$loginQuery = "SELECT admin FROM \"user\" WHERE email='$email' AND
+        password='$password'";
+        echo $loginQuery;
+		$loginResult = pg_query($loginQuery);
+		if(!$loginResult) exit("Error logging in.");
+        if (pg_num_rows($loginResult) == 0) echo "Incorrect password.<br/>";
+        
+		$row = pg_fetch_row($loginResult);
+        $_SESSION['email'] = $email;
+        $db_admin = $row[0];
 
-		while($row = pg_fetch_row($res)) {
-			if(count($row) == 0) {
-				directToLoginPage();
-				echo "User name does not exist <br>";
-			}
-			else {
-				$db_user = $row[0];
-				$db_pwd = $row[1];
-				$db_admin = $row[2];
-
-				if($db_user == $user_name){
-					if($db_pwd == $password) {
-						$_SESSION['user_name'] = $user_name;
-						$_SESSION['password'] = $password;
-
-						if($db_admin == 0) {
-							directToProfilePage();
-						} else if($db_admin == 1) {
-							directToAdminPage();
-						}
-					}else {
-						echo "<br> Wrong Password";
-					}
-					echo "<br> Wrong User Name";
-				}
-			}
-		}
+        if ($db_admin == 0) {
+            directToProfilePage();
+        } else if($db_admin == 1) {
+            directToAdminPage();
+        }
 	}
 }
 
@@ -62,7 +51,7 @@ pg_close($dbconn);
 		<tr>
 			<td style="background‐color:#00FF00;">
 				<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-					Email: <input type="text" name="username" id="username" placeholder="User Name">
+					Email: <input type="text" name="email" id="email" placeholder="User Name">
 					<br>
 					Password: <input type="password" name="password" id="password" placeholder="Password">
 					<br>

@@ -1,20 +1,19 @@
 <?php 
 require_once 'php/sqlconn.php';
 require_once 'libs.php';
+require_once 'redirectIfLogin.php';
 session_start();
 
-if(isset($_POST['sign-up'], $_POST['email'], $_POST['password'], $_POST['username'])) {
+$posted = isset($_POST['sign-up'], $_POST['email'], $_POST['password']);
+if($posted) {
     
     $adminVal = var_export($_POST['admin'] == admin, true);
-	$query = "INSERT INTO \"user\"(email, username, password, admin)
-	VALUES('".$_POST['email']."', '".$_POST['username']."', '".$_POST['password']."', '".$adminVal."');";
+	$query = "INSERT INTO \"user\"(email, password, admin)
+	VALUES('".$_POST['email']."', '".$_POST['password']."', '".$adminVal."');";
 	$result = pg_query($query);
 	if ($result) {
-		$_SESSION['username'] = $_POST['username'];
-		$_SESSION['password'] = $_POST['password'];
+		$_SESSION['email'] = $_POST['email'];
 		directToHomePage();
-	} else {
-		echo "Error adding user!";
 	}
 } else {
     echo "Fill in the following information to sign up";
@@ -42,5 +41,10 @@ pg_close($dbconn);
 		<br/>
         <input type="submit" name="sign-up" value="Sign up"/>
 	</form>
+<?php 
+if ($posted && !$result) {
+    echo "Error signing up, please try again.";
+}
+?>
 </body>
 </html>

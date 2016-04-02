@@ -99,4 +99,5 @@ Add new vehicle
     <script>
         $('#datepicker').datepicker();
     </script>
+    <?php require_once 'footer.php'; ?>
 </html>

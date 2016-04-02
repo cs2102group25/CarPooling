@@ -1,0 +1,1 @@
+<footer class="footer"> Copyright &#169; CS2102</footer>

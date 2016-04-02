@@ -61,9 +61,6 @@ session_start();
     <?php
     pg_close($dbconn);
     ?>
-
-  <footer class="footer"> Copyright &#169; CS2102</footer>
-
-  
 </body>
+    <?php require_once 'footer.php'; ?>
 </html>

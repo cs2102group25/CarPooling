@@ -95,12 +95,9 @@ $title = "Home";
     pg_close($dbconn);
     ?>
       </td>
-      </tr>
+    </tr>
 </table>
-
-    </form>
-  <footer class="footer"> Copyright &#169; CS2102</footer>
-
-  
+</form>
 </body>
+    <?php require_once 'footer.php'; ?>
 </html>

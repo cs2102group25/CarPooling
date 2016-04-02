@@ -227,11 +227,10 @@ $title = "My Trips";
       </td>
       </tr>
 </table>
-
-  <footer class="footer"> Copyright &#169; CS2102</footer>
 <script>
 $('#datepicker').datepicker();
 </script>
   
 </body>
+<?php require_once 'footer.php'; ?>
 </html>

@@ -15,7 +15,36 @@ session_start();
 </head>
 
 <body>
-    <?php require_once 'header.php';?>
+    <?php require_once 'header.php';
+    require_once 'php/sqlconn.php';
+    require_once 'libs.php';
+
+        if (!isset($_SESSION['email'])) {
+          exit;
+        }
+
+        // Add Functions
+        if (isset($_POST['pick-up'], $_POST['drop-off'], $_POST['time'], $_POST['duration'], $_POST['seats'],
+         $_POST['price'], $_POST['vehicle'])) {
+
+          for ($i = 0; $i < $_POST['seats']; $i++) {
+            $endTime = date('Y-m-d h:i:s', strtotime("+".$_POST['duration']." minutes", strtotime($_POST['time'])));
+            $addQuery = "INSERT INTO provides_trip(seat_no, car_plate, price, start_time, end_time, start_loc, end_loc, posted)
+            VALUES(".($i+1).", '".$_POST['vehicle']."', '".$_POST['price']."', '".$_POST['time']."', '$endTime', '".$_POST['pick-up']."', '".$_POST['drop-off']."', 'true')";
+
+            $addResult = pg_query($addQuery);
+            if (!$addResult) $addError = true;
+          }
+          
+        }
+
+        // Delete
+        if (isset($_POST['delete'])) {
+            $car_info = explode("_", $_POST['delete']);
+            $deleteQuery = "DELETE FROM provides_trip WHERE car_plate = '$car_info[0]' AND seat_no = $car_info[1];";
+            $deleteResult = pg_query($deleteQuery);
+        }
+    ?>
 	
   <table class="resultTable">
     <tr>
@@ -27,7 +56,7 @@ session_start();
         <form method='post'>
         <?php 
             require_once 'php/sqlconn.php';
-          $arrayTitle = ["From", "To", "When", "Duration", "No. Seats", "By", "Price", "Plate no", "Actions"];
+          $arrayTitle = ["From", "To", "When", "Duration", "Seat No.", "Price", "Vehicle", "Actions"];
 
           $query;
           if (isset($_GET['searchForTrip'])) {
@@ -40,7 +69,7 @@ session_start();
 
           echo "<div class='container'><div class='row'>";	
           for ($i = 0; $i < count($arrayTitle); $i++) {
-            if ($i == 0 || $i == 1 || $i == 7) {
+            if ($i == 0 || $i == 1 || $i == 2 || $i == 6) {
               echo "<div class='col-lg-2 col-md-2 result'>".$arrayTitle[$i]."</div>";
             } else {
               echo "<div class='col-lg-1 col-md-1 result'>".$arrayTitle[$i]."</div>";
@@ -50,18 +79,20 @@ session_start();
 
          while ($line = pg_fetch_row($result)) {
            echo "<div class='row'>";
-           for ($i = 0; $i < count($line); $i++) {
-             if ($i == 0 || $i == 1) {}
-             else if ($i == 2 || $i == 3 || $i == 9) {
-               echo "<div class='col-lg-2 col-md-2 result'>".$line[$i]."</div>";	
-             } else {
-               echo "<div class='col-lg-1 col-md-1 result'>".$line[$i]."</div>";
-             }
-           }
-           echo "<div class='col-lg-1 col-md-1 result'><input type='submit' name=delete[] value='Delete'><br/>
-           <input type='submit' name=update[] value='Update'></div></div>";
-         }
+               echo "<div class='col-lg-2 col-md-2 result'>".$line[5]."</div>";	
+               echo "<div class='col-lg-2 col-md-2 result'>".$line[6]."</div>";	
+               
+               echo "<div class='col-lg-2 col-md-2 result'>".$line[3]."</div>";
+               echo "<div class='col-lg-1 col-md-1 result'>".$line[4]."</div>";
+               
+               echo "<div class='col-lg-1 col-md-1 result'>".$line[0]."</div>";
+               
+               echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
+               
+               echo "<div class='col-lg-2 col-md-2 result'>".$line[1]."</div>";
+           echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=delete value='".$line[1]."_".$line[0]."'] >Delete</button></div>";
       echo "</div>";
+         }
       pg_free_result($result);
       ?>
     </form>
@@ -76,7 +107,7 @@ session_start();
                 Vehicle:
             </div>
             <div class="col-lg-8 col-md-8">
-                <select>
+                <select name="vehicle">
                     <?php
                     $vehicleQuery = "SELECT c.car_plate, c.model FROM car c, ownership o WHERE '".$_SESSION['email']."' = o.email AND o.car_plate = c.car_plate;";
                     $vehicleResult = pg_query($vehicleQuery)or die('Query failed: '.pg_last_error());;
@@ -110,7 +141,7 @@ session_start();
                 Starting time
             </div>
             <div class="col-lg-8 col-md-8">
-                <input type="text" name="time" value="00:00:00"/>
+                <input type="text" name="time" value="<?php echo date('Y-m-d h:i:s', time() + 7*24*60*60); ?>"/>
             </div>
         </div>
         <div class="row">
@@ -118,7 +149,7 @@ session_start();
                 Estimated Duration
             </div>
             <div class="col-lg-8 col-md-8">
-                <input type="text" name="duration" placeholder="0 minutes"/>
+                <input type="text" name="duration" value="30 minutes"/>
             </div>
         </div>
         <div class="row">
@@ -126,7 +157,7 @@ session_start();
                 Seats available
             </div>
             <div class="col-lg-8 col-md-8">
-                <input type="number" name="seats-available" value=1 min=1 />
+                <input type="number" name="seats" value=1 min=1 />
             </div>
         </div>
         <div class="row">
@@ -134,7 +165,7 @@ session_start();
                 Price
             </div>
             <div class="col-lg-8 col-md-8">
-                <input type="text" name="price" placeholder="0" />
+                <input type="text" name="price" value="0" />
             </div>
         </div>
         <div class="row">
@@ -144,59 +175,42 @@ session_start();
         </div>
     </div>
     </form>
-      </td>
-      </tr>
 
     <?php require_once 'php/sqlconn.php';
         require_once 'libs.php';
 
-        if (!isset($_SESSION['email'], $_SESSION['password'])) {
+        if (!isset($_SESSION['email'])) {
           exit;
         }
 
         // Add Functions
-        if (isset($_POST['add'], $_POST['pick-up'], $_POST['drop-off'], $_POST['time'], $_POST['duration'], $_POST['seat-available'],
-          $_POST['vehicle'], $_POST['price'], $_POST['plate-no'])){
-
-          //for (int i = 0; i < $_POST['seat_no'])
-          //$query = "INSERT INTO provides_trip(seat_no, car_plate, price, start_time, end_time, start_loc, end_loc, posted)
-          //VALUES($seats_available, )";
-
-          $result = pg_query($query) or die('Query failed: '.pg_last_error());
-          
-          if ($result) {
-            echo "New trip added";
-          }  else {
-            echo "Trip not added";
-          }
-        } else {
-          echo "Missing input<br/>";
+        if (isset($_POST['add'])) {
+          if (isset($_POST['pick-up'], $_POST['drop-off'], $_POST['time'], $_POST['duration'], $_POST['seats'],
+             $_POST['price'], $_POST['vehicle'])) {
+             if (!$addError) {
+               echo "New trip added!";
+             }  else {
+               echo "Error occurred.";
+             }
+           } else {
+             echo "Please fill in all fields.";
+           }
         }
 
-        // Delete + Update functions
-        if (isset($_POST['actions']) && isset($_POST['delete'])) {
-          $query = "DELETE FROM trip WHERE trip_id IN (".implode(",", $_POST['delete']).")";
-          $result = pg_query($query) or die('Query failed: '.pg_last_error());
-          if ($result) {
-            echo "Trip(s) deleted";
+        // Delete
+        if (isset($_POST['delete'])) {
+          if ($deleteResult) {
+            echo "Trip deleted";
           } else {
-            echo "Trip(s) not deleted";
-          }
-        }
-
-        if (isset($_POST['actions']) && isset($_POST['update'])) {
-          $query = "UPDATE FROM trip WHERE trip_id IN (".implode(",", $_POST['update']).")";
-          $result = pg_query($query) or die('Query failed: '.pg_last_error());
-          if ($result) {
-            echo "Trip(s) updated";
-          } else {
-            echo "Trip(s) not updated";
+            echo "Error occurred deleting trip.";
           }
         }
     ?>
     <?php
     pg_close($dbconn);
     ?>
+      </td>
+      </tr>
 </table>
 
   <footer class="footer"> Copyright &#169; CS2102</footer>

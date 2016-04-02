@@ -48,15 +48,11 @@ $title = "My Trips";
   <table class="resultTable">
     <tr>
       <td>
-        <form method='get' action="index.php">
-                Location: <input type="text" name="searchQuery" id="searchQuery" placeholder="Location">
-                 <input type="submit" name="searchForTrip" value="Search">
-        </form>
         <form method='post'>
         <?php 
           require_once 'php/sqlconn.php';
           $arrayTitle = ["From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle", "Actions"];    
-            $query = 'SELECT * FROM provides_trip p, ownership o WHERE (p.start_loc LIKE \'%'.$_GET['searchQuery'].'%\' OR p.end_loc LIKE \'%'.$_GET['searchQuery'].'%\') AND p.car_plate = o.car_plate AND o.email =\''.$_SESSION['email'].'\'';
+          $query = 'SELECT * FROM provides_trip p, ownership o WHERE p.car_plate = o.car_plate AND o.email =\''.$_SESSION['email'].'\'';
           
 
           $result = pg_query($query) or die('Query failed: '.pg_last_error());

@@ -12,10 +12,8 @@ if (!isset($_SESSION['email'])) {
     directToLoginPage();
 }
     
-echo "Your bookings:";
-
 echo "<div class='container'>";
-$bookingQuery = "SELECT p.start_time, p.end_time, p.start_loc, p.end_loc FROM provides_trip p, make_transaction m, booking b WHERE m.email = '".$_SESSION['email']."' AND m.time = b.time AND m.email = b.email;";
+$bookingQuery = "SELECT p.start_time, p.end_time, p.start_loc, p.end_loc FROM provides_trip p, make_transaction m, booking b WHERE m.email = '".$_SESSION['email']."' AND m.time = b.time AND m.email = b.email AND b.car_plate = p.car_plate AND b.seat_no = p.seat_no AND b.start_time = p.start_time;";
 $bookingResult = pg_query($bookingQuery);
     
 $arrayTitle = ['Start Time', 'End Time', 'Source', 'Destination'];
@@ -25,18 +23,20 @@ for ($i = 0; $i < count($arrayTitle); $i++ ) {
 }
 echo "</div>";
 
-if ($bookingResult) {
-    $bookingCount = pg_num_rows($bookingResult);
+if ($bookingResult && $bookingCount = pg_num_rows($bookingResult) > 0) {
     for ($i = 0; $i < $bookingCount; $i++) {
         $row = pg_fetch_row($bookingResult);
 
+        echo "<div class='row result'>";
+        for ($i = 0; $i < count($arrayTitle); $i++ ) {
+            echo "<div class='col-md-3'>".$row[$i]."</div>";
+        }
+        echo "</div>";
+    }
+} else {
     echo "<div class='row result'>";
-    for ($i = 0; $i < count($arrayTitle); $i++ ) {
-        echo "<div class='col-md-3'>".$row[$i]."</div>";
-    }
-
+    echo "<div class='col-md-12'>You have no bookings.</div>";
     echo "</div>";
-    }
 }
 
 echo "</div>";

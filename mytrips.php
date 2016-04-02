@@ -56,6 +56,7 @@ $title = "My Trips";
           
 
           $result = pg_query($query) or die('Query failed: '.pg_last_error());
+          $resultCount = pg_num_rows($result);
 
           echo "<div class='container'><div class='row'>";	
           for ($i = 0; $i < count($arrayTitle); $i++) {
@@ -67,21 +68,27 @@ $title = "My Trips";
          }
          echo "</div>";
 
-         while ($line = pg_fetch_row($result)) {
-           echo "<div class='row'>";
-           echo "<div class='col-lg-2 col-md-2 result'>".$line[5]."</div>";	
-           echo "<div class='col-lg-2 col-md-2 result'>".$line[6]."</div>";	
+         if (resultCount > 0) {
+           while ($line = pg_fetch_row($result)) {
+             echo "<div class='row'>";
+             echo "<div class='col-lg-2 col-md-2 result'>".$line[5]."</div>";	
+             echo "<div class='col-lg-2 col-md-2 result'>".$line[6]."</div>";	
 
-           echo "<div class='col-lg-2 col-md-2 result'>".$line[3]."</div>";
-           echo "<div class='col-lg-2 col-md-2 result'>".$line[4]."</div>";
+             echo "<div class='col-lg-2 col-md-2 result'>".$line[3]."</div>";
+             echo "<div class='col-lg-2 col-md-2 result'>".$line[4]."</div>";
 
-           echo "<div class='col-lg-1 col-md-1 result'>".$line[0]."</div>";
+             echo "<div class='col-lg-1 col-md-1 result'>".$line[0]."</div>";
 
-           echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
+             echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
 
-           echo "<div class='col-lg-1 col-md-1 result'>".$line[1]."</div>";
-           echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=delete value='".$line[1]."_".$line[0]."_".$line[3]."'] >Delete</button></div>";
-           echo "</div>";
+             echo "<div class='col-lg-1 col-md-1 result'>".$line[1]."</div>";
+             echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=delete value='".$line[1]."_".$line[0]."_".$line[3]."'] >Delete</button></div>";
+             echo "</div>";
+           }
+         } else {
+            echo "<div class='row result'>";
+            echo "<div class='col-md-12'>You have no trips.</div>";
+            echo "</div>";
          }
          pg_free_result($result);
       ?>

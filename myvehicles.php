@@ -6,7 +6,6 @@ session_start();
 $title = "My Vehicles";
 require_once 'php/sqlconn.php';
 require_once 'libs.php';
-require_once 'styles.php';
 require_once 'header.php';
 if (!isset($_SESSION['email'])) {
     directToLoginPage();
@@ -37,15 +36,14 @@ echo "</div>";
 
 $vehicleResult = pg_query($vehicleQuery);
 
-if ($vehicleResult && $vehicleCount = pg_num_rows($vehicleResult) > 0) {
-    
+if ($vehicleResult && ($vehicleCount = pg_num_rows($vehicleResult)) > 0) {
     for ($i = 0; $i < $vehicleCount; $i++) {
         $row = pg_fetch_row($vehicleResult);
 
-    echo "<div class='row result'>";
-        echo "<div class='col-md-6'>".$row[0]."</div>";
-        echo "<div class='col-md-6'>".$row[1]."</div>";
-    echo "</div>";
+        echo "<div class='row result'>";
+            echo "<div class='col-md-6'>".$row[0]."</div>";
+            echo "<div class='col-md-6'>".$row[1]."</div>";
+        echo "</div>";
     }
 } else {
     echo "<div class='row result'>";
@@ -84,7 +82,7 @@ Add new vehicle
                 Ownership Expiration
             </div>
             <div class="col-lg-8 col-md-8">
-                <input type="text" name="expiration" value="<?php echo date('Y-m-d', time() + 7*24*60*60); ?>"/>
+                <input id="datepicker" type="text" name="expiration" />
             </div>
         </div>
         <div class="row">
@@ -97,4 +95,10 @@ Add new vehicle
             </td>
         </tr>
     </table>
+    <?php 
+require_once 'styles.php';
+    ?>
+    <script>
+        $('#datepicker').datepicker();
+    </script>
 </html>

@@ -6,6 +6,7 @@ session_start();
 $title = "My Vehicles";
 require_once 'php/sqlconn.php';
 require_once 'libs.php';
+require_once 'styles.php';
 require_once 'header.php';
 if (!isset($_SESSION['email'])) {
     directToLoginPage();
@@ -95,9 +96,6 @@ Add new vehicle
             </td>
         </tr>
     </table>
-    <?php 
-require_once 'styles.php';
-    ?>
     <script>
         $('#datepicker').datepicker();
     </script>

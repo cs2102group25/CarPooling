@@ -21,12 +21,14 @@ $title = "My Trips";
         }
 
         // Add Functions
-        if (isset($_POST['pick-up'], $_POST['drop-off'], $_POST['time'], $_POST['duration'], $_POST['seats'],
+        if (isset($_POST['pick-up'], $_POST['drop-off'], $_POST['date'], $_POST['time'], $_POST['duration'], $_POST['seats'],
          $_POST['price'], $_POST['vehicle'])) {
           for ($i = 0; $i < $_POST['seats']; $i++) {
-            $endTime = date('Y-m-d h:i:s', strtotime("+".$_POST['duration'], strtotime($_POST['time'])));
+            $startTime = $_POST['date']." ".$_POST['time'];
+              echo $startTime;
+            $endTime = date('Y-m-d h:i:s', strtotime("+".$_POST['duration']." minutes", strtotime($startTime)));
             $addQuery = "INSERT INTO provides_trip(seat_no, car_plate, price, start_time, end_time, start_loc, end_loc, posted)
-            VALUES(".($i+1).", '".$_POST['vehicle']."', '".$_POST['price']."', '".$_POST['time']."', '$endTime', '".$_POST['pick-up']."', '".$_POST['drop-off']."', 'true')";
+            VALUES(".($i+1).", '".$_POST['vehicle']."', '".$_POST['price']."', '".$startTime."', '$endTime', '".$_POST['pick-up']."', '".$_POST['drop-off']."', 'true')";
 
             $addResult = pg_query($addQuery);
             if (!$addResult) $addError = true;
@@ -70,7 +72,7 @@ $title = "My Trips";
          }
          echo "</div>";
 
-         if (resultCount > 0) {
+         if ($resultCount > 0) {
            while ($line = pg_fetch_row($result)) {
              echo "<div class='row'>";
              echo "<div class='col-lg-2 col-md-2 result'>".$line[5]."</div>";	
@@ -103,7 +105,7 @@ $title = "My Trips";
     <div class="addTrip">
         <div class="row">
             <div class="col-lg-4 col-md-4">
-                Vehicle:
+                Vehicle
             </div>
             <div class="col-lg-8 col-md-8">
                     <?php
@@ -145,18 +147,28 @@ $title = "My Trips";
         </div>
         <div class="row">
             <div class="col-lg-4 col-md-4">
-                Starting time
+                Date
             </div>
             <div class="col-lg-8 col-md-8">
-                <input type="text" name="time" value="<?php echo date('Y-m-d h:i:s', time() + 7*24*60*60); ?>"/>
+                <input id="datepicker" type="text" name="date"/>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-4 col-md-4">
-                Estimated Duration
+                Starting time
             </div>
             <div class="col-lg-8 col-md-8">
-                <input type="text" name="duration" value="30 minutes"/>
+                <input type="text" name="time" value="<?php 
+                                                      date_default_timezone_set('Asia/Singapore');
+                                                      echo date('h:i:s', time()); ?>"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                Estimated Duration (minutes)
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <input type="text" name="duration" value="30"/>
             </div>
         </div>
         <div class="row">
@@ -190,7 +202,7 @@ $title = "My Trips";
           exit;
         }
 
-        // Add Functions
+        // add status
         if (isset($_POST['add'])) {
           if (isset($_POST['pick-up'], $_POST['drop-off'], $_POST['time'], $_POST['duration'], $_POST['seats'],
              $_POST['price'], $_POST['vehicle'])) {
@@ -204,7 +216,7 @@ $title = "My Trips";
            }
         }
 
-        // Delete
+        // delete status
         if (isset($_POST['delete'])) {
           if ($deleteResult && $rowsDeleted > 0) {
             echo "Trip deleted";
@@ -221,7 +233,9 @@ $title = "My Trips";
 </table>
 
   <footer class="footer"> Copyright &#169; CS2102</footer>
-
+<script>
+$('#datepicker').datepicker();
+</script>
   
 </body>
 </html>

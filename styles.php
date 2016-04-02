@@ -1,4 +1,5 @@
 <link rel="stylesheet" type="text/css" href="css/style.css"/>
+<link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker.min.css"/>
 
 <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
 <script src="js/bootstrap-datepicker.min.js"></script>

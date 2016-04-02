@@ -11,8 +11,8 @@ $title = "My Trips";
 
 <body>
     <?php 
-    require_once 'styles.php';
     require_once 'header.php';
+    require_once 'menu.php';
     require_once 'php/sqlconn.php';
     require_once 'libs.php';
 

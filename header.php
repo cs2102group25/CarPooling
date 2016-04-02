@@ -1,43 +1,14 @@
-<div class="header">
-    <div style="float:left; font-size:4vmin;">
-        <div class='row'>
-            <div class='col-md-12'><a href="index.php"><b>Car Pooling</b></a></div>
-        </div>
-        <div class='row'>
-            <div class='col-md-12'><?php
-    if ($title)
-        echo $title;
-    else
-        echo "Unknown page";
-    ?></div>
-        </div>
-        
-        <div class='row'>
-            <div class='col-md-12'>
-            <?php    
-        if (isset($_SESSION['email'])) {
-          echo "<button type='button' class='btn btn-info btn-lg' id='my-bookings-btn' onclick='location.href=\"mybookings.php\"'>My Bookings</button>
-          <button type='button' class='btn btn-info btn-lg' id='my-vehicles-btn' onclick='location.href=\"myvehicles.php\"'>My Vehicles</button>
-          <button type='button' class='btn btn-info btn-lg' id='my-trips-btn' onclick='location.href=\"mytrips.php\"'>My Trips</button>";
-        }
-        ?>
-            </div>
-        </div>
-        
-    
-        
-    </div>
-    
-    <div style="float:right;">
-        <?php    
-        if (!isset($_SESSION['email'])) {
-          echo "
-          <button type='button' class='btn btn-info btn-lg' id='login-btn' onclick='location.href=\"login.php\"'>Login</button>
-          <button type='button' class='btn btn-info btn-lg' id='signup-btn' onclick='location.href=\"signup.php\"'>Sign up</button>";
-        } else {
-          echo "Logged in as ".$_SESSION['email'].".
-          <button type='button' class='btn btn-info btn-lg' id='signup-btn' onclick='location.href=\"logout.php\"'>Logout</button>";
-        }
-        ?>
-    </div>
-</div>
+
+<head>
+	<title>CS2102 Car Pooling</title>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-datepicker.min.css"/>
+
+    <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="js/bootstrap-datepicker.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>

@@ -5,13 +5,7 @@ session_start();
 <html>
 <head>
 	<title>CS2102 Car Pooling</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-    <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
-    <script src="js/js.js" type="text/javascript"></script>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	
 </head>
 
 <body>
@@ -97,119 +91,9 @@ session_start();
     </form>
   </td> </tr>
 
-  <tr> <td>
-    Add new trip
-    <form method="post" action="index.php">
-    <div class="addTrip">
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Vehicle:
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <select name="vehicle">
-                    <?php
-                    $vehicleQuery = "SELECT c.car_plate, c.model FROM car c, ownership o WHERE '".$_SESSION['email']."' = o.email AND o.car_plate = c.car_plate;";
-                    $vehicleResult = pg_query($vehicleQuery)or die('Query failed: '.pg_last_error());;
-                    $numRows = pg_num_rows($vehicleResult);
-                    for ($i = 0; $i < $numRows; $i++) {
-                        $curVehicle = pg_fetch_row($vehicleResult);
-                        echo "<option value='".$curVehicle[0]."' >".$curVehicle[0]." (".$curVehicle[1].")"."</option>";
-                    }
-                    ?>
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Pick-up Point
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input type="text" name="pick-up" placeholder="Pick-up" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Drop-off Point
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input type="text" name="drop-off" placeholder="Drop-off"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Starting time
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input type="text" name="time" value="<?php echo date('Y-m-d h:i:s', time() + 7*24*60*60); ?>"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Estimated Duration
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input type="text" name="duration" value="30 minutes"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Seats available
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input type="number" name="seats" value=1 min=1 />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Price
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input type="text" name="price" value="0" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12 col-md-12">
-                <input type="submit" name="add" value="Add" />
-            </div>
-        </div>
-    </div>
-    </form>
-
-    <?php require_once 'php/sqlconn.php';
-        require_once 'libs.php';
-
-        if (!isset($_SESSION['email'])) {
-          exit;
-        }
-
-        // Add Functions
-        if (isset($_POST['add'])) {
-          if (isset($_POST['pick-up'], $_POST['drop-off'], $_POST['time'], $_POST['duration'], $_POST['seats'],
-             $_POST['price'], $_POST['vehicle'])) {
-             if (!$addError) {
-               echo "New trip added!";
-             }  else {
-               echo "Error occurred.";
-             }
-           } else {
-             echo "Please fill in all fields.";
-           }
-        }
-
-        // Delete
-        if (isset($_POST['delete'])) {
-          if ($deleteResult && $rowsDeleted > 0) {
-            echo "Trip deleted";
-          } else {
-            echo "Error occurred deleting trip.";
-          }
-        }
-    ?>
     <?php
     pg_close($dbconn);
     ?>
-      </td>
-      </tr>
 </table>
 
   <footer class="footer"> Copyright &#169; CS2102</footer>

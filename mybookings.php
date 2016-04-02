@@ -12,9 +12,9 @@ require_once 'header.php';
 if (!isset($_SESSION['email'])) {
     directToLoginPage();
 }
-    
+echo "<table class='resultTable'><tr><td>";
 echo "<div class='container'>";
-$bookingQuery = "SELECT p.start_time, p.end_time, p.start_loc, p.end_loc FROM provides_trip p, make_transaction m, booking b WHERE m.email = '".$_SESSION['email']."' AND m.time = b.time AND m.email = b.email AND b.car_plate = p.car_plate AND b.seat_no = p.seat_no AND b.start_time = p.start_time;";
+$bookingQuery = "SELECT p.start_time, p.end_time, p.start_loc, p.end_loc FROM provides_trip p, make_transaction m, booking b WHERE m.email = '".$_SESSION['email']."' AND m.time = b.time AND m.email = b.email AND b.car_plate = p.car_plate AND b.seat_no = p.seat_no AND b.start_time = p.start_time ORDER BY p.start_time;";
 $bookingResult = pg_query($bookingQuery);
     
 $arrayTitle = ['Start Time', 'End Time', 'Source', 'Destination'];
@@ -41,7 +41,7 @@ if ($bookingResult && $bookingCount = pg_num_rows($bookingResult) > 0) {
 }
 
 echo "</div>";
-
+echo "</td></tr></table>";
 
 ?>
 </html>

@@ -75,3 +75,22 @@ CREATE TABLE Ownership(
   FOREIGN KEY(car_plate) REFERENCES Car(car_plate)
 );
 ```
+
+Currently identified problems:
+- Table results are all in 1 page, which is bad when there are alot of records
+  - this is applicable for ALL views (except maybe not so urgent for myvehicles)
+- Vehicles cannot be deleted
+- Bookings cannot be cancelled (are we implementing this?)
+- Error messages when trying to add/delete trips are not specific enough
+  - e.g. trips that are already booked cannot be deleted
+- Login page is not styled
+- Admin does not have rights to delete any records
+- Searches are still minimal
+  - Include search by source/destination? user? price?
+  - Applicable for all views
+- Users can still book their own trip (heh)
+- Results are by per-seat basis (each seat has a different record)
+  - We might want to combine some search results into 1 record with the running seat count instead
+  - I think this is mainly applicable for index.php and mytrips.php only
+- Footer is missing in myvehicles.php
+- mybookings.php might want to include more trip details

@@ -7,7 +7,16 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
 <div class="header">
-  <div style="float:left; font-size:4vmin;"><b>Car Pooling</b></div>
+  <div style="float:left; font-size:4vmin;"><b>Car Pooling</b><div style="float:right;">
+        <?php    
+        if (isset($_SESSION['email'])) {
+          echo "
+          <button type='button' class='btn btn-info btn-lg' id='my-vehicles-btn' onclick='location.href=\"myvehicles.php\"'>My Vehicles</button>
+          <button type='button' class='btn btn-info btn-lg' id='my-trips-btn' onclick='location.href=\"mytrips.php\"'>My Trips</button>";
+        }
+        ?>
+    </div></div>
+    
     <div style="float:right;">
         <?php    
         if (!isset($_SESSION['email'])) {

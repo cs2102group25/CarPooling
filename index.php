@@ -5,7 +5,13 @@ session_start();
 <html>
 <head>
 	<title>CS2102 Car Pooling</title>
-	
+	<link rel="stylesheet" type="text/css" href="style.css">
+    <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="js/js.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -17,30 +23,13 @@ session_start();
           exit;
         }
 
-        // Add Functions
-        if (isset($_POST['pick-up'], $_POST['drop-off'], $_POST['time'], $_POST['duration'], $_POST['seats'],
-         $_POST['price'], $_POST['vehicle'])) {
-          for ($i = 0; $i < $_POST['seats']; $i++) {
-            $endTime = date('Y-m-d h:i:s', strtotime("+".$_POST['duration'], strtotime($_POST['time'])));
-            $addQuery = "INSERT INTO provides_trip(seat_no, car_plate, price, start_time, end_time, start_loc, end_loc, posted)
-            VALUES(".($i+1).", '".$_POST['vehicle']."', '".$_POST['price']."', '".$_POST['time']."', '$endTime', '".$_POST['pick-up']."', '".$_POST['drop-off']."', 'true')";
-
-            $addResult = pg_query($addQuery);
-            if (!$addResult) $addError = true;
-          }
-        }
-
-        // Delete
-        if (isset($_POST['delete'])) {
-            $car_info = explode("_", $_POST['delete']);
-            $deleteQuery = "DELETE FROM provides_trip p WHERE p.car_plate IN (
-            SELECT o.car_plate FROM ownership o WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1]
-            AND p.car_plate = o.car_plate AND o.email = '".$_SESSION['email']."');";
-            $deleteResult = pg_query($deleteQuery);
-            $rowsDeleted = pg_affected_rows($deleteResult);
+        // Booking
+        if (isset($_POST['book'])) {
+            $car_info = explode("_", $_POST['book']);
         }
     ?>
 	
+        <form method='post' action="payment.php">
   <table class="resultTable">
     <tr>
       <td>
@@ -48,7 +37,6 @@ session_start();
                 Location: <input type="text" name="searchQuery" id="searchQuery" placeholder="Location">
                  <input type="submit" name="searchForTrip" value="Search">
         </form>
-        <form method='post'>
         <?php 
           require_once 'php/sqlconn.php';
           $arrayTitle = ["From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle", "Actions"];
@@ -83,19 +71,37 @@ session_start();
            echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
 
            echo "<div class='col-lg-1 col-md-1 result'>".$line[1]."</div>";
-           echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=delete value='".$line[1]."_".$line[0]."'] >Delete</button></div>";
+           $timestamp = strtotime($line[3]);
+           echo "<div class='col-lg-1 col-md-1 result'><input type='checkbox' name=book[] value='".$line[1]."_".$line[0]."_".$timestamp."'] >  </div>";
            echo "</div>";
          }
          pg_free_result($result);
       ?>
-    </form>
   </td> </tr>
 
+  <tr> <td>
+    <?php require_once 'php/sqlconn.php';
+        require_once 'libs.php';
+
+        if (!isset($_SESSION['email'])) {
+          exit;
+        }
+
+      echo "<button type='submit'>Book</button>";
+        // Booking Functions
+        if (isset($_POST['book'])) {
+            
+        }
+
+    ?>
     <?php
     pg_close($dbconn);
     ?>
+      </td>
+      </tr>
 </table>
 
+    </form>
   <footer class="footer"> Copyright &#169; CS2102</footer>
 
   

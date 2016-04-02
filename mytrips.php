@@ -34,8 +34,7 @@ session_start();
         if (isset($_POST['delete'])) {
             $car_info = explode("_", $_POST['delete']);
             $deleteQuery = "DELETE FROM provides_trip p WHERE p.car_plate IN (
-            SELECT o.car_plate FROM ownership o WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1]
-            AND p.car_plate = o.car_plate AND o.email = '".$_SESSION['email']."');";
+            SELECT o.car_plate FROM ownership o WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1] AND p.start_time = '$car_info[2]' AND p.car_plate = o.car_plate AND o.email = '".$_SESSION['email']."');";
             $deleteResult = pg_query($deleteQuery);
             $rowsDeleted = pg_affected_rows($deleteResult);
         }
@@ -52,7 +51,7 @@ session_start();
         <?php 
           require_once 'php/sqlconn.php';
           $arrayTitle = ["From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle", "Actions"];    
-            $query = 'SELECT * FROM provides_trip p, ownership o WHERE p.start_loc LIKE \'%'.$_GET['searchQuery'].'%\' OR p.end_loc LIKE \'%'.$_GET['searchQuery'].'%\' AND p.car_plate = o.car_plate AND o.email =\''.$_SESSION['email'].'\'';
+            $query = 'SELECT * FROM provides_trip p, ownership o WHERE (p.start_loc LIKE \'%'.$_GET['searchQuery'].'%\' OR p.end_loc LIKE \'%'.$_GET['searchQuery'].'%\') AND p.car_plate = o.car_plate AND o.email =\''.$_SESSION['email'].'\'';
           
 
           $result = pg_query($query) or die('Query failed: '.pg_last_error());
@@ -80,7 +79,7 @@ session_start();
            echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
 
            echo "<div class='col-lg-1 col-md-1 result'>".$line[1]."</div>";
-           echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=delete value='".$line[1]."_".$line[0]."'] >Delete</button></div>";
+           echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=delete value='".$line[1]."_".$line[0]."_".$line[3]."'] >Delete</button></div>";
            echo "</div>";
          }
          pg_free_result($result);

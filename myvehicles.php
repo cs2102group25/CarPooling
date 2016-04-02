@@ -50,7 +50,7 @@ echo "</div>";
 
 
 ?>
-Add new trip
+Add new vehicle
     <form method="post" action="myvehicles.php">
     <div class="addInfo">
         <div class="row">

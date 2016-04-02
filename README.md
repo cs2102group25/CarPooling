@@ -20,6 +20,7 @@ Ownership(email VARCHAR(32), car_plate VARCHAR(10), expiration DATE, PRIMARY KEY
 ```
 
 SQL DDL:
+_Simply copy and paste this and execute as SQL in pgAdmin._
 ```
 CREATE TABLE Car(
   car_plate VARCHAR(10) PRIMARY KEY,

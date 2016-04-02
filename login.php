@@ -50,10 +50,14 @@ pg_close($dbconn);
 		<tr>
 			<td style="background‐color:#00FF00;">
                 <?php
-                if (pg_num_rows($userResult) == 0) {
-                    echo 'Username not found.';
-                } else if (!$loginResult == 0) {
-                    echo 'Incorrect password.';
+                if (isset($_POST['login'])) {
+                    if (isset($_POST['email']) && isset($_POST['password'])) {
+                        if (pg_num_rows($userResult) == 0) {
+                            echo 'Username not found.';
+                        } else if (!$loginResult == 0) {
+                            echo 'Incorrect password.';
+                        }
+                    }
                 }
                 ?>
 				<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">

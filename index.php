@@ -26,7 +26,6 @@ session_start();
         // Add Functions
         if (isset($_POST['pick-up'], $_POST['drop-off'], $_POST['time'], $_POST['duration'], $_POST['seats'],
          $_POST['price'], $_POST['vehicle'])) {
-
           for ($i = 0; $i < $_POST['seats']; $i++) {
             $endTime = date('Y-m-d h:i:s', strtotime("+".$_POST['duration']." minutes", strtotime($_POST['time'])));
             $addQuery = "INSERT INTO provides_trip(seat_no, car_plate, price, start_time, end_time, start_loc, end_loc, posted)
@@ -35,14 +34,16 @@ session_start();
             $addResult = pg_query($addQuery);
             if (!$addResult) $addError = true;
           }
-          
         }
 
         // Delete
         if (isset($_POST['delete'])) {
             $car_info = explode("_", $_POST['delete']);
-            $deleteQuery = "DELETE FROM provides_trip WHERE car_plate = '$car_info[0]' AND seat_no = $car_info[1];";
+            $deleteQuery = "DELETE FROM provides_trip p WHERE p.car_plate IN (
+            SELECT o.car_plate FROM ownership o WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1]
+            AND p.car_plate = o.car_plate AND o.email = '".$_SESSION['email']."');";
             $deleteResult = pg_query($deleteQuery);
+            $rowsDeleted = pg_affected_rows($deleteResult);
         }
     ?>
 	
@@ -55,10 +56,8 @@ session_start();
         </form>
         <form method='post'>
         <?php 
-            require_once 'php/sqlconn.php';
+          require_once 'php/sqlconn.php';
           $arrayTitle = ["From", "To", "When", "Duration", "Seat No.", "Price", "Vehicle", "Actions"];
-
-          $query;
           if (isset($_GET['searchForTrip'])) {
             $query = 'SELECT * FROM provides_trip WHERE start_loc LIKE \'%'.$_GET['searchQuery'].'%\' OR end_loc LIKE \'%'.$_GET['searchQuery'].'%\'';
           } else {
@@ -79,21 +78,21 @@ session_start();
 
          while ($line = pg_fetch_row($result)) {
            echo "<div class='row'>";
-               echo "<div class='col-lg-2 col-md-2 result'>".$line[5]."</div>";	
-               echo "<div class='col-lg-2 col-md-2 result'>".$line[6]."</div>";	
-               
-               echo "<div class='col-lg-2 col-md-2 result'>".$line[3]."</div>";
-               echo "<div class='col-lg-1 col-md-1 result'>".$line[4]."</div>";
-               
-               echo "<div class='col-lg-1 col-md-1 result'>".$line[0]."</div>";
-               
-               echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
-               
-               echo "<div class='col-lg-2 col-md-2 result'>".$line[1]."</div>";
+           echo "<div class='col-lg-2 col-md-2 result'>".$line[5]."</div>";	
+           echo "<div class='col-lg-2 col-md-2 result'>".$line[6]."</div>";	
+
+           echo "<div class='col-lg-2 col-md-2 result'>".$line[3]."</div>";
+           echo "<div class='col-lg-1 col-md-1 result'>".$line[4]."</div>";
+
+           echo "<div class='col-lg-1 col-md-1 result'>".$line[0]."</div>";
+
+           echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
+
+           echo "<div class='col-lg-2 col-md-2 result'>".$line[1]."</div>";
            echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=delete value='".$line[1]."_".$line[0]."'] >Delete</button></div>";
-      echo "</div>";
+           echo "</div>";
          }
-      pg_free_result($result);
+         pg_free_result($result);
       ?>
     </form>
   </td> </tr>
@@ -199,7 +198,7 @@ session_start();
 
         // Delete
         if (isset($_POST['delete'])) {
-          if ($deleteResult) {
+          if ($deleteResult && $rowsDeleted > 0) {
             echo "Trip deleted";
           } else {
             echo "Error occurred deleting trip.";

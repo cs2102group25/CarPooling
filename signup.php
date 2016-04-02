@@ -33,8 +33,6 @@ pg_close($dbconn);
 	<form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
 		Email : <input type="text" name="email" id="email" placeholder="Email"/>
 		<br/>
-        Username : <input type="text" name="username" id="username" placeholder="Username"/>
-		<br/>
 		Password: <input type="password" name="password" id="password" placeholder="Password"/>
 		<br/>
 		<input type="checkbox" name="admin" value="admin"/> Admin 

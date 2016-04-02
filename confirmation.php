@@ -27,7 +27,7 @@ session_start();
         }
         $tripCount = count($_POST['trip']);
         for ($i = 0; $i < $tripCount; $i++) {
-            $car_info = 
+            $car_info = explode("_", $_POST['trip'][$i]);
             $bookingQuery = "INSERT INTO booking 
         }
 

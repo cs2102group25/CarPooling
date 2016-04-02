@@ -14,7 +14,7 @@ Make_Transaction(email VARCHAR(32), time DATETIME, amount DECIMAL(10,2));
 
 Provides_Trip(seat_no INTEGER, price DECIMAL(10, 2), start_time DATETIME, end_time DATETIME, start_loc VARCHAR(32), end_loc VARCHAR(32), posted BOOLEAN, car_plate VARCHAR(10), PRIMARY KEY(seat_no, car_plate), FOREIGN KEY(car_plate) REFERENCES Car(car_plate));
 
-Booking(seat_no INTEGER, email VARCHAR(32), time DATETIME, cancelled BOOLEAN, PRIMARY KEY(seat_no, email), FOREIGN KEY (seat_no, car_plate) REFERENCES Provides_Trip(seat_no, car_plate), FOREIGN KEY(email, time) REFERENCES Make_Transaction(email, time));
+Booking(seat_no INTEGER, car_plate VARCHAR(10), start_time DATETIME, email VARCHAR(32), time DATETIME, PRIMARY KEY(seat_no, car_plate, email, time), FOREIGN KEY (seat_no, car_plate, start_time) REFERENCES Provides_Trip(seat_no, car_plate, start_time), FOREIGN KEY(email, time) REFERENCES Make_Transaction(email, time));
 
 Ownership(email VARCHAR(32), car_plate VARCHAR(10), expiration DATE, PRIMARY KEY(email, car_plate), FOREIGN KEY(email) REFERENCES User(email), FOREIGN KEY(car_plate REFERENCES Car(car_plate));
 ```
@@ -57,11 +57,10 @@ CREATE TABLE Provides_Trip(
 
 CREATE TABLE Booking(
   seat_no INTEGER,
-  email VARCHAR(32),
+  car_plate VARCHAR(10),
   start_time TIMESTAMP,
+  email VARCHAR(32),
   time TIMESTAMP,
-  car_plate VARCHAR(10) NOT NULL,
-  cancelled BOOLEAN NOT NULL,
   PRIMARY KEY(seat_no, car_plate, start_time, email, time),
   FOREIGN KEY (seat_no, car_plate, start_time) REFERENCES Provides_Trip(seat_no, car_plate, start_time),
   FOREIGN KEY(email, time) REFERENCES Make_Transaction(email, time)

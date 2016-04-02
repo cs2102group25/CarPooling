@@ -20,16 +20,15 @@ session_start();
     require_once 'libs.php';
 
         if (!isset($_SESSION['email'])) {
-          exit;
+          directToLoginPage();
         }
-
-        // Booking
-        if (isset($_POST['book'])) {
-            $car_info = explode("_", $_POST['book']);
+        if (!isset($_POST['book'])) {
+          directToBookingPage();
         }
+    
+        $tripCount = count($_POST['book']);
     ?>
 	
-        <form method='post' action="payment.php">
   <table class="resultTable">
     <tr>
       <td>
@@ -37,17 +36,11 @@ session_start();
                 Location: <input type="text" name="searchQuery" id="searchQuery" placeholder="Location">
                  <input type="submit" name="searchForTrip" value="Search">
         </form>
+        <form method='post'>
         <?php 
           require_once 'php/sqlconn.php';
           $arrayTitle = ["From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle", "Actions"];
-          if (isset($_GET['searchForTrip'])) {
-            $query = 'SELECT * FROM provides_trip WHERE start_loc LIKE \'%'.$_GET['searchQuery'].'%\' OR end_loc LIKE \'%'.$_GET['searchQuery'].'%\'';
-          } else {
-            $query = 'SELECT * FROM provides_trip';
-          }
-
-          $result = pg_query($query) or die('Query failed: '.pg_last_error());
-
+          
           echo "<div class='container'><div class='row'>";	
           for ($i = 0; $i < count($arrayTitle); $i++) {
             if ($i == 0 || $i == 1 || $i == 2 || $i == 3) {
@@ -58,7 +51,12 @@ session_start();
          }
          echo "</div>";
 
-         while ($line = pg_fetch_row($result)) {
+            
+         for ($i = 0; $i < $tripCount; $i++) {
+           $car_info = explode("_", $_POST['book'][$i]);
+           $tripQuery = "SELECT * FROM provides_trip p WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1];";
+           $tripResult = pg_query($tripQuery);
+           $line = pg_fetch_row($tripResult);
            echo "<div class='row'>";
            echo "<div class='col-lg-2 col-md-2 result'>".$line[5]."</div>";	
            echo "<div class='col-lg-2 col-md-2 result'>".$line[6]."</div>";	
@@ -71,14 +69,16 @@ session_start();
            echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
 
            echo "<div class='col-lg-1 col-md-1 result'>".$line[1]."</div>";
-           echo "<div class='col-lg-1 col-md-1 result'><input type='checkbox' name=book[] value='".$line[1]."_".$line[0]."'] >  </div>";
+           echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=book value='".$line[1]."_".$line[0]."'] >Remove (dummy)</button></div>";
            echo "</div>";
          }
          pg_free_result($result);
       ?>
+    </form>
   </td> </tr>
 
   <tr> <td>
+      <form method="post" action="confirmation.php">
     <?php require_once 'php/sqlconn.php';
         require_once 'libs.php';
 
@@ -86,13 +86,15 @@ session_start();
           exit;
         }
 
-      echo "<button type='submit'>Book</button>";
         // Booking Functions
-        if (isset($_POST['book'])) {
-            
+        for ($i = 0; $i < $tripCount; $i++) {
+          echo "<input type='text' name=trip value='".$_POST['book'][$i]."' hidden/>";
         }
 
+        echo "<button type='submit' name=payment>Make payment for the above trips</button>";
+
     ?>
+      </form>
     <?php
     pg_close($dbconn);
     ?>
@@ -100,7 +102,6 @@ session_start();
       </tr>
 </table>
 
-    </form>
   <footer class="footer"> Copyright &#169; CS2102</footer>
 
   

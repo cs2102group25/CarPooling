@@ -23,10 +23,6 @@ function directToProfilePage() {
 	echo "<script type='text/javascript'> document.location = 'profile.php'; </script>";
 }
 
-function directToBookingPage() {
-	echo "<script type='text/javascript'> document.location = 'booking.php'; </script>";
-}
-
 function countingRows($table) {
 	$result = pg_query("SELECT * FROM ".$table);
 	$num_rows = pg_num_rows($result);

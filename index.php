@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
 session_start();
+$title = "Home";
 ?>
 <html>
 <head>

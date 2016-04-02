@@ -23,7 +23,7 @@ session_start();
           directToLoginPage();
         }
         if (!isset($_POST['book'])) {
-          directToBookingPage();
+          directToHomePage();
         }
     
         $tripCount = count($_POST['book']);
@@ -88,7 +88,7 @@ session_start();
 
         // Booking Functions
         for ($i = 0; $i < $tripCount; $i++) {
-          echo "<input type='text' name=trip value='".$_POST['book'][$i]."' hidden/>";
+          echo "<input type='text' name=trip[] value='".$_POST['book'][$i]."' hidden/>";
         }
 
         echo "<button type='submit' name=payment>Make payment for the above trips</button>";

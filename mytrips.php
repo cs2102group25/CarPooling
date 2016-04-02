@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
 session_start();
+$title = "My Trips";
 ?>
 <html>
 <head>

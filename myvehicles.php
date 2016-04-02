@@ -2,10 +2,11 @@
 <!DOCTYPE html>
 <html>
 <?php
+session_start();
+$title = "My Vehicles";
 require_once 'php/sqlconn.php';
 require_once 'libs.php';
 require_once 'header.php';
-
 if (!isset($_SESSION['email'])) {
     directToLoginPage();
 }

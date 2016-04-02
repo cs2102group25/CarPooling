@@ -19,95 +19,46 @@ session_start();
     require_once 'php/sqlconn.php';
     require_once 'libs.php';
 
-        if (!isset($_SESSION['email'])) {
-          directToLoginPage();
+    if (!isset($_SESSION['email'])) {
+      directToLoginPage();
+    }
+    if (!isset($_POST['payment'])) {
+      directToBookingPage();
+    }
+    $tripCount = count($_POST['trip']);
+    
+    // handle transaction here
+    $totalPrice = 0;
+    for ($i = 0; $i < $tripCount; $i++) {
+        $car_info = explode("_", $_POST['trip'][$i]);
+        $carCostQuery = "SELECT p.price FROM provides_trip p WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1] AND p.start_time = '".date('Y-m-d h:i:s', $car_info[2])."';";
+        $carCostResult = pg_query($carCostQuery);
+        $line = pg_fetch_row($carCostResult);
+        $totalPrice += $line[0];
+    }
+    $transactionTime = date('Y-m-d h:i:s', time());
+    $transactionQuery = "INSERT INTO make_transaction (email, time, amount) VALUES ('".$_SESSION['email']."', '".$transactionTime."', $totalPrice);";
+    $transactionResult = pg_query($transactionQuery);
+    if (!$transactionResult || pg_affected_rows($transactionResult) != 1) {
+        exit("Error occurred while making transaction.");
+    }
+    
+    
+    // handle booking here
+    for ($i = 0; $i < $tripCount; $i++) {
+        $car_info = explode("_", $_POST['trip'][$i]);
+        $bookingQuery = "INSERT INTO booking (seat_no, car_plate, start_time, email, time) VALUES ('$car_info[1]', $car_info[0], '".date('Y-m--d h:i:s', $car_info[2])."', '".$_SESSION['email']."', '$transactionTime');";
+        $bookingResult = pg_query($bookingQuery);
+        if (!$bookingResult || pg_affected_rows($bookingResult) != 1) {
+            exit("Error occurred while booking.");
         }
-        if (!isset($_POST['payment'])) {
-          directToBookingPage();
-        }
-        $tripCount = count($_POST['trip']);
-        for ($i = 0; $i < $tripCount; $i++) {
-            $car_info = explode("_", $_POST['trip'][$i]);
-            $bookingQuery = "INSERT INTO booking 
-        }
-
-        echo "You have paid! Now to add booking records into database.";
+    }
+    echo "Transaction successful!";
     ?>
 	
-  <table class="resultTable">
-    <tr>
-      <td>
-        <form method='get' action="index.php">
-                Location: <input type="text" name="searchQuery" id="searchQuery" placeholder="Location">
-                 <input type="submit" name="searchForTrip" value="Search">
-        </form>
-        <form method='post'>
-        <?php 
-          require_once 'php/sqlconn.php';
-          $arrayTitle = ["From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle", "Actions"];
-          
-          echo "<div class='container'><div class='row'>";	
-          for ($i = 0; $i < count($arrayTitle); $i++) {
-            if ($i == 0 || $i == 1 || $i == 2 || $i == 3) {
-              echo "<div class='col-lg-2 col-md-2 result'>".$arrayTitle[$i]."</div>";
-            } else {
-              echo "<div class='col-lg-1 col-md-1 result'>".$arrayTitle[$i]."</div>";
-            }
-         }
-         echo "</div>";
-
-            
-         for ($i = 0; $i < $tripCount; $i++) {
-           $car_info = explode("_", $_POST['book'][$i]);
-           $tripQuery = "SELECT * FROM provides_trip p WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1];";
-           $tripResult = pg_query($tripQuery);
-           $line = pg_fetch_row($tripResult);
-           echo "<div class='row'>";
-           echo "<div class='col-lg-2 col-md-2 result'>".$line[5]."</div>";	
-           echo "<div class='col-lg-2 col-md-2 result'>".$line[6]."</div>";	
-
-           echo "<div class='col-lg-2 col-md-2 result'>".$line[3]."</div>";
-           echo "<div class='col-lg-2 col-md-2 result'>".$line[4]."</div>";
-
-           echo "<div class='col-lg-1 col-md-1 result'>".$line[0]."</div>";
-
-           echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
-
-           echo "<div class='col-lg-1 col-md-1 result'>".$line[1]."</div>";
-           echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=book value='".$line[1]."_".$line[0]."'] >Remove (dummy)</button></div>";
-           echo "</div>";
-         }
-         pg_free_result($result);
-      ?>
-    </form>
-  </td> </tr>
-
-  <tr> <td>
-      <form action="payment.php">
-    <?php require_once 'php/sqlconn.php';
-        require_once 'libs.php';
-
-        if (!isset($_SESSION['email'])) {
-          exit;
-        }
-
-        // Booking Functions
-        if (isset($_POST['book'])) {
-            for ($i = 0; $i < $tripCount; $i++) {
-              echo "<input type='text' value='".$_POST['book'][$i]."' hidden/>";
-            }
-            
-            echo "<button type='submit' name=payment>Make payment for the above trips</button>";
-        }
-
-    ?>
-      </form>
     <?php
     pg_close($dbconn);
     ?>
-      </td>
-      </tr>
-</table>
 
   <footer class="footer"> Copyright &#169; CS2102</footer>
 

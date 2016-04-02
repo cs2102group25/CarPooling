@@ -2,7 +2,7 @@
 
 Currently, the user and password for PostgresSQL are both assumed to be 'postgres'.
 
-![](erdplus-diagram-4.png)
+![](erdplus-diagram-5.png)
 
 The relations are:
 ```
@@ -50,18 +50,19 @@ CREATE TABLE Provides_Trip(
   start_loc VARCHAR(32) NOT NULL,
   end_loc VARCHAR(32) NOT NULL,
   posted BOOLEAN NOT NULL,
-  PRIMARY KEY(seat_no, car_plate),
+  PRIMARY KEY(seat_no, car_plate, start_time),
   FOREIGN KEY(car_plate) REFERENCES Car(car_plate)
 );
 
 CREATE TABLE Booking(
   seat_no INTEGER,
   email VARCHAR(32),
+  start_time TIMESTAMP,
   time TIMESTAMP,
   car_plate VARCHAR(10) NOT NULL,
   cancelled BOOLEAN NOT NULL,
-  PRIMARY KEY(seat_no, car_plate, email, time),
-  FOREIGN KEY (seat_no, car_plate) REFERENCES Provides_Trip(seat_no, car_plate),
+  PRIMARY KEY(seat_no, car_plate, start_time, email, time),
+  FOREIGN KEY (seat_no, car_plate, start_time) REFERENCES Provides_Trip(seat_no, car_plate, start_time),
   FOREIGN KEY(email, time) REFERENCES Make_Transaction(email, time)
 );
 

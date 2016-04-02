@@ -23,8 +23,12 @@ session_start();
           directToLoginPage();
         }
         if (!isset($_POST['payment'])) {
-            echo "Not from payment page?";
-          //directToBookingPage();
+          directToBookingPage();
+        }
+        $tripCount = count($_POST['trip']);
+        for ($i = 0; $i < $tripCount; $i++) {
+            $car_info = 
+            $bookingQuery = "INSERT INTO booking 
         }
 
         echo "You have paid! Now to add booking records into database.";

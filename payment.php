@@ -54,7 +54,9 @@ session_start();
             
          for ($i = 0; $i < $tripCount; $i++) {
            $car_info = explode("_", $_POST['book'][$i]);
-           $tripQuery = "SELECT * FROM provides_trip p WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1];";
+             print_r($car_info);
+           $tripQuery = "SELECT * FROM provides_trip p WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1] AND p.start_time = '".date('Y-m-d h:i:s', $car_info[2])."';";
+             echo $tripQuery;
            $tripResult = pg_query($tripQuery);
            $line = pg_fetch_row($tripResult);
            echo "<div class='row'>";
@@ -69,7 +71,7 @@ session_start();
            echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
 
            echo "<div class='col-lg-1 col-md-1 result'>".$line[1]."</div>";
-           echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=book value='".$line[1]."_".$line[0]."'] >Remove (dummy)</button></div>";
+           echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=book value='".$line[1]."_".$line[0]."_".$car_info[2]."'] >Remove (dummy)</button></div>";
            echo "</div>";
          }
          pg_free_result($result);

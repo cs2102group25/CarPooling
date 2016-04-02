@@ -71,7 +71,9 @@ session_start();
            echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
 
            echo "<div class='col-lg-1 col-md-1 result'>".$line[1]."</div>";
-           echo "<div class='col-lg-1 col-md-1 result'><input type='checkbox' name=book[] value='".$line[1]."_".$line[0]."'] >  </div>";
+             $timestamp = strtotime($line[3]);
+             echo $timestamp;
+           echo "<div class='col-lg-1 col-md-1 result'><input type='checkbox' name=book[] value='".$line[1]."_".$line[0]."_".$timestamp."'] >  </div>";
            echo "</div>";
          }
          pg_free_result($result);

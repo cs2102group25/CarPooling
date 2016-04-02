@@ -2,7 +2,7 @@
 
 Currently, the user and password for PostgresSQL are both assumed to be 'postgres'.
 
-![](erdplus-diagram-5.png)
+![](erdplus-diagram.png)
 
 The relations are:
 ```

@@ -10,7 +10,9 @@ $title = "My Trips";
 </head>
 
 <body>
-    <?php require_once 'header.php';
+    <?php 
+    require_once 'styles.php';
+    require_once 'header.php';
     require_once 'php/sqlconn.php';
     require_once 'libs.php';
 
@@ -104,14 +106,22 @@ $title = "My Trips";
                 Vehicle:
             </div>
             <div class="col-lg-8 col-md-8">
-                <select name="vehicle">
                     <?php
                     $vehicleQuery = "SELECT c.car_plate, c.model FROM car c, ownership o WHERE '".$_SESSION['email']."' = o.email AND o.car_plate = c.car_plate;";
                     $vehicleResult = pg_query($vehicleQuery)or die('Query failed: '.pg_last_error());;
                     $numRows = pg_num_rows($vehicleResult);
-                    for ($i = 0; $i < $numRows; $i++) {
-                        $curVehicle = pg_fetch_row($vehicleResult);
-                        echo "<option value='".$curVehicle[0]."' >".$curVehicle[0]." (".$curVehicle[1].")"."</option>";
+                    
+                    if ($numRows > 0) {
+                        echo "<select name='vehicle'>";
+                        for ($i = 0; $i < $numRows; $i++) {
+                            $curVehicle = pg_fetch_row($vehicleResult);
+                            echo "<option value='".$curVehicle[0]."' >".$curVehicle[0]." (".$curVehicle[1].")"."</option>";
+                        }
+                        echo "</select>";
+                    } else {
+                        echo "<select disabled>";
+                        echo "<option>Add a vehicle first!</option>";
+                        echo "</select>";
                     }
                     ?>
                 </select>

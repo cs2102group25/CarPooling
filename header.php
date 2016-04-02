@@ -1,11 +1,3 @@
-<link rel="stylesheet" type="text/css" href="style.css">
-<script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
-<script src="js/js.js" type="text/javascript"></script>
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
 <div class="header">
     <div style="float:left; font-size:4vmin;"><a href="index.php"><b>Car Pooling</b></a><br/><?php
     if ($title)
@@ -15,10 +7,9 @@
     ?><div style="float:right;">
         <?php    
         if (isset($_SESSION['email'])) {
-          echo "
+          echo "<button type='button' class='btn btn-info btn-lg' id='my-bookings-btn' onclick='location.href=\"mybookings.php\"'>My Bookings</button>
           <button type='button' class='btn btn-info btn-lg' id='my-vehicles-btn' onclick='location.href=\"myvehicles.php\"'>My Vehicles</button>
-          <button type='button' class='btn btn-info btn-lg' id='my-trips-btn' onclick='location.href=\"mytrips.php\"'>My Trips</button>
-          <button type='button' class='btn btn-info btn-lg' id='my-bookings-btn' onclick='location.href=\"mybookings.php\"'>My Bookings</button>";
+          <button type='button' class='btn btn-info btn-lg' id='my-trips-btn' onclick='location.href=\"mytrips.php\"'>My Trips</button>";
         }
         ?>
     </div></div>

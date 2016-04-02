@@ -16,7 +16,9 @@ $title = "Home";
 </head>
 
 <body>
-    <?php require_once 'header.php';
+    <?php 
+    require_once 'styles.php';
+    require_once 'header.php';
     require_once 'php/sqlconn.php';
     require_once 'libs.php';
 
@@ -40,7 +42,7 @@ $title = "Home";
         </form>
         <?php 
           require_once 'php/sqlconn.php';
-          $arrayTitle = ["From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle", "Actions"];
+          $arrayTitle = ["Selected", "From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle"];
           if (isset($_GET['searchForTrip'])) {
             $query = 'SELECT * FROM provides_trip WHERE start_loc LIKE \'%'.$_GET['searchQuery'].'%\' OR end_loc LIKE \'%'.$_GET['searchQuery'].'%\'';
           } else {
@@ -51,7 +53,7 @@ $title = "Home";
 
           echo "<div class='container'><div class='row'>";	
           for ($i = 0; $i < count($arrayTitle); $i++) {
-            if ($i == 0 || $i == 1 || $i == 2 || $i == 3) {
+            if ($i == 1 || $i == 2 || $i == 3 || $i == 4) {
               echo "<div class='col-lg-2 col-md-2 result'>".$arrayTitle[$i]."</div>";
             } else {
               echo "<div class='col-lg-1 col-md-1 result'>".$arrayTitle[$i]."</div>";
@@ -61,6 +63,8 @@ $title = "Home";
 
          while ($line = pg_fetch_row($result)) {
            echo "<div class='row'>";
+           $timestamp = strtotime($line[3]);
+           echo "<div class='col-lg-1 col-md-1 result'><input type='checkbox' name=book[] value='".$line[1]."_".$line[0]."_".$timestamp."' / >  </div>";
            echo "<div class='col-lg-2 col-md-2 result'>".$line[5]."</div>";	
            echo "<div class='col-lg-2 col-md-2 result'>".$line[6]."</div>";	
 
@@ -72,8 +76,6 @@ $title = "Home";
            echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
 
            echo "<div class='col-lg-1 col-md-1 result'>".$line[1]."</div>";
-           $timestamp = strtotime($line[3]);
-           echo "<div class='col-lg-1 col-md-1 result'><input type='checkbox' name=book[] value='".$line[1]."_".$line[0]."_".$timestamp."'] >  </div>";
            echo "</div>";
          }
          pg_free_result($result);

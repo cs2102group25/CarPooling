@@ -80,7 +80,7 @@ Currently identified problems:
 - Table results are all in 1 page, which is bad when there are alot of records
   - this is applicable for ALL views (except maybe not so urgent for myvehicles)
 - Vehicles cannot be deleted even when they are not used
-- Error messages when trying to add/delete trips are not specific enough
+- Error messages when trying to add/delete <s>trips</s> anything are not specific enough
   - e.g. trips that are already booked cannot be deleted
 - Login page is not styled
 - Admin does not have rights to delete any records

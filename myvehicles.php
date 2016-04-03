@@ -15,7 +15,7 @@ if (!isset($_SESSION['email'])) {
 if (isset($_POST['addVehicle'])) {
     $addCarQuery = "INSERT INTO car (car_plate, model) VALUES('".$_POST['car_plate']."', '".$_POST['model']."');";
     $addCarResult = pg_query($addCarQuery);
-    
+
     $addOwnershipQuery = "INSERT INTO ownership (email, car_plate, expiration) VALUES('".$_SESSION['email']."', '".$_POST['car_plate']."', '".$_POST['expiration']."');";
     $addOwnershipResult = pg_query($addOwnershipQuery);
 }
@@ -96,6 +96,15 @@ Add new vehicle
             </td>
         </tr>
     </table>
+    <?php
+    if (isset($_POST['addVehicle'])) {
+        if ($addOwnershipResult && $addCarResult) {
+            echo "<div class='alert alert-success'>Vehicle added!</div>";
+        } else {
+            echo "<div class='alert alert-warning'>Please set all fields</div>";
+        }
+    }
+    ?>
     <script>
         $('#datepicker').datepicker();
     </script>

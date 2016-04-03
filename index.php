@@ -43,14 +43,14 @@ $title = "Home";
               $query = $query.' WHERE ';
               $condition = false;
               if ($_GET['searchLocation']) {
-                  $query = $query.'start_loc LIKE \'%'.$_GET['searchLocation'].'%\' OR end_loc LIKE \'%'.$_GET['searchLocation'].'%\'';
+                  $query = $query.'(start_loc LIKE \'%'.$_GET['searchLocation'].'%\' OR end_loc LIKE \'%'.$_GET['searchLocation'].'%\')';
                   $condition = true;
               }
               if ($_GET['searchMaxPrice']) {
                   if ($condition) {
                       $query = $query.' AND ';
                   }
-                  $query = $query.'price < '.$_GET['searchMaxPrice'].';';
+                  $query = $query.'price < '.$_GET['searchMaxPrice'];
                   $condition = true;
               }
               $query = $query.';';

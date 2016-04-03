@@ -4,8 +4,6 @@
 <?php
 session_start();
 $title = "My Vehicles";
-require_once 'php/sqlconn.php';
-require_once 'libs.php';
 require_once 'header.php';
 require_once 'menu.php';
 if (!isset($_SESSION['email'])) {

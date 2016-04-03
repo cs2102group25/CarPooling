@@ -4,8 +4,6 @@
 <?php
 session_start();
 $title = "All Bookings";
-require_once 'php/sqlconn.php';
-require_once 'libs.php';
 require_once 'header.php';
 require_once 'menu.php';
 

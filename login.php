@@ -8,8 +8,7 @@ $title = "Login";
 <?php require_once 'header.php'; ?>
 <body>
     <?php 
-        require_once 'php/sqlconn.php';
-        require_once 'libs.php';
+        require_once 'menu.php';
 
         if (isset($_POST['login'])) {
             if (isset($_POST['email']) && isset($_POST['password'])) {

@@ -8,8 +8,7 @@ $title = "Sign up";
 <?php require_once 'header.php'; ?>
 <body>
     <?php 
-        require_once 'php/sqlconn.php';
-        require_once 'libs.php';
+        require_once 'menu.php';
 
         $posted = isset($_POST['sign-up'], $_POST['email'], $_POST['password']);
         if ($posted) {

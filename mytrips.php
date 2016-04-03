@@ -12,9 +12,6 @@ $title = "My Trips";
     <?php 
     require_once 'header.php';
     require_once 'menu.php';
-    require_once 'php/sqlconn.php';
-    require_once 'libs.php';
-
         if (!isset($_SESSION['email'])) {
           exit;
         }

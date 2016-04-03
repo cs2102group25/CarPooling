@@ -5,14 +5,9 @@ require_once 'redirectIfLogin.php';
 $title = "Login";
 ?>
 <html>
-<head>
-	<title>CS2102 Car Pooling</title>
-    <?php require_once 'header.php'; ?>
-</head>
-
+<?php require_once 'header.php'; ?>
 <body>
     <?php 
-        require_once 'menu.php';
         require_once 'php/sqlconn.php';
         require_once 'libs.php';
 
@@ -53,9 +48,9 @@ $title = "Login";
         if (isset($_POST['login'])) {
             if (isset($_POST['email']) && isset($_POST['password'])) {
                 if (pg_num_rows($userResult) == 0) {
-                    echo 'Username not found.<br/>';
+                    echo "<div class='alert alert-warning'>Username not found.</div>";
                 } else if (!$loginResult == 0) {
-                    echo 'Incorrect password.<br/>';
+                    echo "<div class='alert alert-warning'>Incorrect password.</div>";
                 }
             }
         }

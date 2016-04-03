@@ -202,21 +202,21 @@ $title = "My Trips";
           if (isset($_POST['pick-up'], $_POST['drop-off'], $_POST['time'], $_POST['duration'], $_POST['seats'],
              $_POST['price'], $_POST['vehicle'])) {
              if (!$addError) {
-               echo "New trip added!";
+               echo "<div class='alert alert-success'>Trip added!</div>";
              }  else {
-               echo "Error occurred.";
+               echo "<div class='alert alert-danger'>Error adding trip.</div>";
              }
            } else {
-             echo "Please fill in all fields.";
+             echo "<div class='alert alert-warning'>Please fill in all fields.</div>";
            }
         }
 
         // delete status
         if (isset($_POST['delete'])) {
           if ($deleteResult && $rowsDeleted > 0) {
-            echo "Trip deleted";
+            echo "<div class='alert alert-success'>Trip deleted!</div>";
           } else {
-            echo "Error occurred deleting trip.";
+            echo "<div class='alert alert-danger'>Error deleting trip.</div>";
           }
         }
     ?>

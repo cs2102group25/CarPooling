@@ -45,7 +45,7 @@ CREATE TABLE Make_Transaction(
 CREATE TABLE Provides_Trip(
   seat_no INTEGER CHECK(seat_no > 0),
   car_plate VARCHAR(10),
-  price DECIMAL(10, 2) NOT NULL CHECK(price > 0),
+  price DECIMAL(10, 2) NOT NULL CHECK(price >= 0),
   start_time TIMESTAMP NOT NULL,
   end_time TIMESTAMP NOT NULL,
   start_loc VARCHAR(32) NOT NULL,

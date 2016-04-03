@@ -37,7 +37,7 @@ CREATE TABLE "user"(
 CREATE TABLE Make_Transaction(
   email VARCHAR(32) NOT NULL,
   time TIMESTAMP NOT NULL DEFAULT now(),
-  amount DECIMAL(10,2) NOT NULL CHECK(amount > 0),
+  amount DECIMAL(10,2) NOT NULL CHECK(amount >= 0),
   PRIMARY KEY(email, time),
   FOREIGN KEY(email) REFERENCES "user"(email)
 );
@@ -82,11 +82,12 @@ Currently identified problems:
   - Plain password
   - Unescape query's variables
 - Table results are all in 1 page, which is bad when there are alot of records
-  - this is applicable for ALL views (except maybe not so urgent for myvehicles)
+  - this is applicable for <s>ALL views</s> **ALL views other than index page's trips listing** (except maybe not so urgent for myvehicles)
 - Vehicles cannot be deleted even when they are not used
 - Error messages when trying to add/delete <s>trips</s> anything are not specific enough
   - e.g. trips that are already booked cannot be deleted
-- Admin does not have rights to delete any records
+- Admin does not have rights to modify all records
+- <s>Users can still book their own trip with customized POST message, but listings of user's trips are removed from index</s>
 - Searches are still minimal
   - Include search by source/destination? user? price?
   - Applicable for all views
@@ -94,9 +95,5 @@ Currently identified problems:
   - We might want to combine some search results into 1 record with the running seat count instead
   - I think this is mainly applicable for index.php and mytrips.php only
 - mybookings.php might want to include more trip details
-
+- <s>Login page is now styled</s>
 - <s>Bookings cannot be cancelled (are we implementing this?)</s>
-
-Solved problems:
-- Login page is now styled
-- Users can still book their own trip with customized POST message, but listings of user's trips are removed from index

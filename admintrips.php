@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <?php
 session_start();
-$title = "My Trips";
+$title = "All Trips";
 ?>
 <html>
-<head>
-	<title>CS2102 Car Pooling</title>
-</head>
-
 <body>
     <?php 
     require_once 'header.php';
@@ -38,7 +34,7 @@ $title = "My Trips";
         if (isset($_POST['delete'])) {
             $car_info = explode("_", $_POST['delete']);
             $deleteQuery = "DELETE FROM provides_trip p WHERE p.car_plate IN (
-            SELECT o.car_plate FROM ownership o WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1] AND p.start_time = '$car_info[2]' AND p.car_plate = o.car_plate AND o.email = '".$_SESSION['email']."');";
+            SELECT o.car_plate FROM ownership o WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1] AND p.start_time = '$car_info[2]' AND p.car_plate = o.car_plate);";
             $deleteResult = pg_query($deleteQuery);
             $rowsDeleted = pg_affected_rows($deleteResult);
         }
@@ -51,7 +47,7 @@ $title = "My Trips";
         <?php 
           require_once 'php/sqlconn.php';
           $arrayTitle = ["From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle", "Actions"];    
-          $query = 'SELECT * FROM provides_trip p, ownership o WHERE p.car_plate = o.car_plate AND o.email =\''.$_SESSION['email'].'\'';
+          $query = 'SELECT * FROM provides_trip p, ownership o WHERE p.car_plate = o.car_plate';
           
 
           $result = pg_query($query) or die('Query failed: '.pg_last_error());
@@ -86,7 +82,7 @@ $title = "My Trips";
            }
          } else {
             echo "<div class='row result'>";
-            echo "<div class='col-md-12'>You have no trips.</div>";
+            echo "<div class='col-md-12'>There are no trips.</div>";
             echo "</div>";
          }
          pg_free_result($result);
@@ -96,7 +92,7 @@ $title = "My Trips";
 
   <tr> <td>
     Add new trip
-    <form method="post" action="mytrips.php">
+    <form method="post" action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>">
     <div class="addTrip">
         <div class="row">
             <div class="col-lg-4 col-md-4">
@@ -104,20 +100,20 @@ $title = "My Trips";
             </div>
             <div class="col-lg-8 col-md-8">
                     <?php
-                    $vehicleQuery = "SELECT c.car_plate, c.model FROM car c, ownership o WHERE '".$_SESSION['email']."' = o.email AND o.car_plate = c.car_plate;";
+                    $vehicleQuery = "SELECT c.car_plate, c.model, o.email FROM car c, ownership o WHERE o.car_plate = c.car_plate;";
                     $vehicleResult = pg_query($vehicleQuery)or die('Query failed: '.pg_last_error());;
                     $numRows = pg_num_rows($vehicleResult);
                     
                     if ($numRows > 0) {
-                        echo "<select name='vehicle'>";
+                        echo "<select name='vehicle' id='vehicle'>";
                         for ($i = 0; $i < $numRows; $i++) {
                             $curVehicle = pg_fetch_row($vehicleResult);
-                            echo "<option value='".$curVehicle[0]."' >".$curVehicle[0]." (".$curVehicle[1].")"."</option>";
+                            echo "<option value='".$curVehicle[0]."'>".$curVehicle[0]." (".$curVehicle[1].") of ".$curVehicle[2]."</option>";
                         }
                         echo "</select>";
                     } else {
                         echo "<select disabled>";
-                        echo "<option>Add a vehicle first!</option>";
+                        echo "<option>There are no vehicles.</option>";
                         echo "</select>";
                     }
                     ?>

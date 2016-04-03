@@ -27,6 +27,10 @@ function directToMyVechicles() {
 	echo "<script type='text/javascript'> document.location = 'myvehicles.php'; </script>";
 }
 
+function directToMyTrips() {
+	echo "<script type='text/javascript'> document.location = 'mytrips.php'; </script>";
+}
+
 function countingRows($table) {
 	$result = pg_query("SELECT * FROM ".$table);
 	$num_rows = pg_num_rows($result);

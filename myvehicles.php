@@ -40,7 +40,7 @@ if(isset($_POST['deleteVehicle'])) {
             <td>
                 <?php
                 echo "<div class='container'>";
-                $vehicleQuery = "SELECT c.car_plate, c.model, c.expiration FROM car c, ownership o WHERE c.car_plate = o.car_plate AND o.email = '".$_SESSION['email']."';";
+                $vehicleQuery = "SELECT c.car_plate, c.model, o.expiration FROM car c, ownership o WHERE c.car_plate = o.car_plate AND o.email = '".$_SESSION['email']."';";
 
                 $arrayTitle = ['Plate No.', 'Model', 'Expiration', 'Delete'];
                 echo "<div class='row result'>";

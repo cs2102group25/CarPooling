@@ -23,13 +23,13 @@ SQL DDL:
 _Simply copy and paste this and execute as SQL in pgAdmin._
 ```
 CREATE TABLE Car(
-  car_plate VARCHAR(10) PRIMARY KEY,
-  model VARCHAR(32) NOT NULL
+  car_plate VARCHAR(10) PRIMARY KEY CHECK(car_plate <> ''),
+  model VARCHAR(32) NOT NULL CHECK(model <> '')
 );
 
 CREATE TABLE "user"(
-  email VARCHAR(32) PRIMARY KEY,
-  password VARCHAR(32) NOT NULL,
+  email VARCHAR(32) PRIMARY KEY CHECK(email <> ''),
+  password VARCHAR(32) NOT NULL CHECK(password <> ''),
   created_date DATE NOT NULL DEFAULT now(),
   admin BOOLEAN NOT NULL
 );
@@ -37,15 +37,15 @@ CREATE TABLE "user"(
 CREATE TABLE Make_Transaction(
   email VARCHAR(32) NOT NULL,
   time TIMESTAMP NOT NULL DEFAULT now(),
-  amount DECIMAL(10,2) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL CHECK(amount > 0),
   PRIMARY KEY(email, time),
   FOREIGN KEY(email) REFERENCES "user"(email)
 );
 
 CREATE TABLE Provides_Trip(
-  seat_no INTEGER,
+  seat_no INTEGER CHECK(seat_no > 0),
   car_plate VARCHAR(10),
-  price DECIMAL(10, 2) NOT NULL,
+  price DECIMAL(10, 2) NOT NULL CHECK(price > 0),
   start_time TIMESTAMP NOT NULL,
   end_time TIMESTAMP NOT NULL,
   start_loc VARCHAR(32) NOT NULL,

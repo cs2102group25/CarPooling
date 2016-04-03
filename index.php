@@ -26,19 +26,34 @@ $title = "Home";
         }
     ?>
 	
-        <form method='post' action="payment.php">
   <table class="resultTable">
     <tr>
       <td>
         <form method='get' action="index.php">
-                Location: <input type="text" name="searchQuery" id="searchQuery" placeholder="Location">
+            Source: <input type="text" name="searchLocation" id="searchLocation" placeholder="Location"/>
+            Maximum price: <input type="number" name="searchMaxPrice" id="searchMaxPrice" min="0"/>
                  <input type="submit" name="searchForTrip" value="Search">
+            
         </form>
         <?php 
           require_once 'php/sqlconn.php';
           $arrayTitle = ["Selected", "From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle"];
+          $query = 'SELECT * FROM provides_trip';
           if (isset($_GET['searchForTrip'])) {
-            $query = 'SELECT * FROM provides_trip WHERE start_loc LIKE \'%'.$_GET['searchQuery'].'%\' OR end_loc LIKE \'%'.$_GET['searchQuery'].'%\'';
+              $query = $query.' WHERE ';
+              $condition = false;
+              if ($_GET['searchLocation']) {
+                  $query = $query.'start_loc LIKE \'%'.$_GET['searchLocation'].'%\' OR end_loc LIKE \'%'.$_GET['searchLocation'].'%\'';
+                  $condition = true;
+              }
+              if ($_GET['searchMaxPrice']) {
+                  if ($condition) {
+                      $query = $query.' AND ';
+                  }
+                  $query = $query.'price < '.$_GET['searchMaxPrice'].';';
+                  $condition = true;
+              }
+              $query = $query.';';
           } else {
             $query = 'SELECT * FROM provides_trip';
           }
@@ -76,6 +91,7 @@ $title = "Home";
       ?>
   </td> </tr>
 
+        <form method='post' action="payment.php">
   <tr> <td>
     <?php require_once 'php/sqlconn.php';
         require_once 'libs.php';
@@ -96,8 +112,8 @@ $title = "Home";
     ?>
       </td>
     </tr>
-</table>
 </form>
+</table>
 </body>
     <?php require_once 'footer.php'; ?>
 </html>

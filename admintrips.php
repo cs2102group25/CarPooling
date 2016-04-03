@@ -117,7 +117,6 @@ $title = "All Trips";
                         echo "</select>";
                     }
                     ?>
-                </select>
             </div>
         </div>
         <div class="row">

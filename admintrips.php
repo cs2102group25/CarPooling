@@ -20,8 +20,8 @@ $title = "All Trips";
          $_POST['price'], $_POST['vehicle'])) {
           for ($i = 0; $i < $_POST['seats']; $i++) {
             $startTime = $_POST['date']." ".$_POST['time'];
-              echo $startTime;
-            $endTime = date('Y-m-d h:i:s', strtotime("+".$_POST['duration']." minutes", strtotime($startTime)));
+            date_default_timezone_set('Asia/Singapore');
+            $endTime = date('Y-m-d HH:i:s', strtotime("+".$_POST['duration']." minutes", strtotime($startTime)));
             $addQuery = "INSERT INTO provides_trip(seat_no, car_plate, price, start_time, end_time, start_loc, end_loc, posted)
             VALUES(".($i+1).", '".$_POST['vehicle']."', '".$_POST['price']."', '".$startTime."', '$endTime', '".$_POST['pick-up']."', '".$_POST['drop-off']."', 'true')";
 
@@ -92,7 +92,7 @@ $title = "All Trips";
 
   <tr> <td>
     Add new trip
-    <form method="post" action="mytrips.php">
+    <form method="post" action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>">
     <div class="addTrip">
         <div class="row">
             <div class="col-lg-4 col-md-4">
@@ -150,7 +150,7 @@ $title = "All Trips";
             <div class="col-lg-8 col-md-8">
                 <input type="text" name="time" value="<?php 
                                                       date_default_timezone_set('Asia/Singapore');
-                                                      echo date('h:i:s', time()); ?>"/>
+                                                      echo date('HH:i:s', time()); ?>"/>
             </div>
         </div>
         <div class="row">

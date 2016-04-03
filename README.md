@@ -70,6 +70,7 @@ CREATE TABLE Ownership(
   email VARCHAR(32),
   car_plate VARCHAR(10),
   expiration DATE NOT NULL,
+  deleted BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY(email, car_plate),
   FOREIGN KEY(email) REFERENCES "user"(email),
   FOREIGN KEY(car_plate) REFERENCES Car(car_plate)
@@ -77,6 +78,9 @@ CREATE TABLE Ownership(
 ```
 
 Currently identified problems:
+- Security
+  - Plain password
+  - Unescape query's variables
 - Table results are all in 1 page, which is bad when there are alot of records
   - this is applicable for ALL views (except maybe not so urgent for myvehicles)
 - Vehicles cannot be deleted even when they are not used
@@ -94,5 +98,5 @@ Currently identified problems:
 - <s>Bookings cannot be cancelled (are we implementing this?)</s>
 
 Solved problems:
-- Login page is not styled
-- Users can still book their own trip (heh)
+- Login page is now styled
+- Users can still book their own trip with customized POST message, but listings of user's trips are removed from index

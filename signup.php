@@ -5,19 +5,14 @@ require_once 'redirectIfLogin.php';
 $title = "Sign up";
 ?>
 <html>
-<head>
-	<title>CS2102 Car Pooling</title>
-    <?php require_once 'header.php'; ?>
-</head>
-
+<?php require_once 'header.php'; ?>
 <body>
     <?php 
-        require_once 'menu.php';
         require_once 'php/sqlconn.php';
         require_once 'libs.php';
 
         $posted = isset($_POST['sign-up'], $_POST['email'], $_POST['password']);
-        if($posted) {
+        if ($posted) {
             
             $adminVal = var_export($_POST['admin'] == admin, true);
             $query = "INSERT INTO \"user\"(email, password, admin)
@@ -41,11 +36,11 @@ $title = "Sign up";
         <hr>
         <div class="form-group">
             <label for="email">Email Address</label>
-            <input class="form-control type="text" placeholder="Enter email" name="email" id="email"/>
+            <input class="form-control" type="text" placeholder="Enter email" name="email" id="email"/>
         </div>
         <div class="form-group">
             <label for="pass">Password</label>
-            <input class="form-control type="password" placeholder="Password" name="password" id="pass"/>
+            <input class="form-control" type="password" placeholder="Password" name="password" id="pass"/>
         </div>
         <div class="checkbox">
             <label>

@@ -37,7 +37,7 @@ CREATE TABLE "user"(
 CREATE TABLE Make_Transaction(
   email VARCHAR(32) NOT NULL,
   time TIMESTAMP NOT NULL DEFAULT now(),
-  amount DECIMAL(10,2) NOT NULL CHECK(amount > 0),
+  amount DECIMAL(10,2) NOT NULL CHECK(amount >= 0),
   PRIMARY KEY(email, time),
   FOREIGN KEY(email) REFERENCES "user"(email)
 );

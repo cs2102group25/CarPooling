@@ -6,7 +6,6 @@ $title = "My Trips";
 <html>
 <head>
 	<title>CS2102 Car Pooling</title>
-	
 </head>
 
 <body>

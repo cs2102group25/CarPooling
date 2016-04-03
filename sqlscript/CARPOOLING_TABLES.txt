@@ -1,26 +1,52 @@
-CREATE TABLE profile (
-	profile_id INT NOT NULL,
-	email VARCHAR(256) UNIQUE NOT NULL,
-	password VARCHAR(256) NOT NULL,
-	first_name VARCHAR(64) NOT NULL,
-	last_name VARCHAR(64) NOT NULL,
-	credit_card_num INT NOT NULL,
-	acc_balance DECIMAL(40, 3) DEFAULT 0 CHECK (acc_balance >= 0),
-	admin INT NOT NULL DEFAULT 0 CHECK (admin=0 OR admin=1),
-	PRIMARY KEY(email, profile_id)
+CREATE TABLE Car(
+  car_plate VARCHAR(10) PRIMARY KEY CHECK(car_plate <> ''),
+  model VARCHAR(32) NOT NULL CHECK(model <> '')
 );
 
-CREATE TABLE trip (
-	trip_id INT NOT NULL,
-	email VARCHAR(256),
-	pick_up VARCHAR(256) NOT NULL,
-	drop_off VARCHAR(256) NOT NULL,
-	time TIME NOT NULL,
-	duration VARCHAR(16),
-	seat_available INT NOT NULL CHECK(seat_available > 0),
-	vehicle VARCHAR(256),
-	price DECIMAL(10, 2) NOT NULL CHECK(price > 0),
-	plate_no VARCHAR(16),
-	PRIMARY KEY(trip_id),
-	FOREIGN KEY(email) REFERENCES profile(email)
+CREATE TABLE "user"(
+  email VARCHAR(32) PRIMARY KEY CHECK(email <> ''),
+  password VARCHAR(32) NOT NULL CHECK(password <> ''),
+  created_date DATE NOT NULL DEFAULT now(),
+  admin BOOLEAN NOT NULL
+);
+
+CREATE TABLE Make_Transaction(
+  email VARCHAR(32) NOT NULL,
+  time TIMESTAMP NOT NULL DEFAULT now(),
+  amount DECIMAL(10,2) NOT NULL CHECK(amount > 0),
+  PRIMARY KEY(email, time),
+  FOREIGN KEY(email) REFERENCES "user"(email)
+);
+
+CREATE TABLE Provides_Trip(
+  seat_no INTEGER CHECK(seat_no > 0),
+  car_plate VARCHAR(10),
+  price DECIMAL(10, 2) NOT NULL CHECK(price >= 0),
+  start_time TIMESTAMP NOT NULL,
+  end_time TIMESTAMP NOT NULL,
+  start_loc VARCHAR(32) NOT NULL,
+  end_loc VARCHAR(32) NOT NULL,
+  posted BOOLEAN NOT NULL,
+  PRIMARY KEY(seat_no, car_plate, start_time),
+  FOREIGN KEY(car_plate) REFERENCES Car(car_plate)
+);
+
+CREATE TABLE Booking(
+  seat_no INTEGER,
+  car_plate VARCHAR(10),
+  start_time TIMESTAMP,
+  email VARCHAR(32),
+  time TIMESTAMP,
+  PRIMARY KEY(seat_no, car_plate, start_time, email, time),
+  FOREIGN KEY (seat_no, car_plate, start_time) REFERENCES Provides_Trip(seat_no, car_plate, start_time),
+  FOREIGN KEY(email, time) REFERENCES Make_Transaction(email, time)
+);
+
+CREATE TABLE Ownership(
+  email VARCHAR(32),
+  car_plate VARCHAR(10),
+  expiration DATE NOT NULL,
+  PRIMARY KEY(email, car_plate),
+  FOREIGN KEY(email) REFERENCES "user"(email),
+  FOREIGN KEY(car_plate) REFERENCES Car(car_plate)
 );

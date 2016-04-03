@@ -1,10 +1,10 @@
 CREATE TABLE profile (
-	profile_id SERIAL,
+	profile_id INT NOT NULL,
 	email VARCHAR(256) UNIQUE NOT NULL,
 	password VARCHAR(256) NOT NULL,
 	first_name VARCHAR(64) NOT NULL,
 	last_name VARCHAR(64) NOT NULL,
-	credit_card_num INT,
+	credit_card_num INT NOT NULL,
 	acc_balance DECIMAL(40, 3) DEFAULT 0 CHECK (acc_balance >= 0),
 	admin INT NOT NULL DEFAULT 0 CHECK (admin=0 OR admin=1),
 	PRIMARY KEY(email, profile_id)

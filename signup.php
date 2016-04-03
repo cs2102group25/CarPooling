@@ -20,6 +20,9 @@ $title = "Sign up";
             $result = pg_query($query);
             if ($result) {
                 $_SESSION['email'] = $_POST['email'];
+                if ($adminVal) {
+                    $_SESSION['admin'] = true;
+                }
                 directToHomePage();
             }
         } else {

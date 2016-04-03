@@ -18,6 +18,7 @@
         if (isset($_SESSION['email'])) {
             if (isset($_SESSION['admin'])) {
                 echo "<button type='button' class='btn btn-info btn-lg' id='my-vehicles-btn' onclick='location.href=\"adminvehicles.php\"'>All Vehicles</button>";
+                echo "<button type='button' class='btn btn-info btn-lg' id='my-trips-btn' onclick='location.href=\"admintrips.php\"'>All Trips</button>";
             } else {
                 echo "<button type='button' class='btn btn-info btn-lg' id='my-bookings-btn' onclick='location.href=\"mybookings.php\"'>My Bookings</button>
                 <button type='button' class='btn btn-info btn-lg' id='my-vehicles-btn' onclick='location.href=\"myvehicles.php\"'>My Vehicles</button>

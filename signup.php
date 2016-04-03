@@ -7,7 +7,6 @@ $title = "Sign up";
 <html>
 <head>
 	<title>CS2102 Car Pooling</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
     <?php require_once 'header.php'; ?>
 </head>
 

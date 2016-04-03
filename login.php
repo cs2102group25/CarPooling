@@ -2,12 +2,11 @@
 <?php
 session_start();
 require_once 'redirectIfLogin.php';
-$title = "Sign up";
+$title = "Login";
 ?>
 <html>
 <head>
 	<title>CS2102 Car Pooling</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
     <?php require_once 'header.php'; ?>
 </head>
 
@@ -54,14 +53,13 @@ $title = "Sign up";
         if (isset($_POST['login'])) {
             if (isset($_POST['email']) && isset($_POST['password'])) {
                 if (pg_num_rows($userResult) == 0) {
-                    echo 'Username not found.';
+                    echo 'Username not found.<br/>';
                 } else if (!$loginResult == 0) {
-                    echo 'Incorrect password.';
+                    echo 'Incorrect password.<br/>';
                 }
             }
         }
     ?>
-    <br/>
 	<form method="post" action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>">
 		<h2>Login Form</h2>
         <hr>

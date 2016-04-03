@@ -1,4 +1,5 @@
-body {
+html, body {
+    min-height: 100%;
 	margin: 0px !important;
 }
 
@@ -41,6 +42,10 @@ body {
 	padding: 10px ;
 	vertical-align: text-bottom;
 	overflow: hidden;
+}
+
+.fill {
+    min-height: 79.8%;
 }
 
 .footer {

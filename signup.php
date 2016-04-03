@@ -48,8 +48,9 @@ $title = "Sign up";
                 Admin
             </label>
         </div>
-        <button type="submit" class="btn btn-primary" name="sign-up" value="Sign up"/>Sign up</button>
+        <button type="submit" class="btn btn-primary" name="sign-up" value="Sign up">Sign up</button>
 	</form>
+    Already have an account? <a href="login.php" class="button right">Login</a>
     </div>
     </div>
 <?php 

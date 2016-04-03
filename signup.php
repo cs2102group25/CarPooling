@@ -7,10 +7,11 @@ session_start();
 $posted = isset($_POST['sign-up'], $_POST['email'], $_POST['password']);
 if($posted) {
     
-    $adminVal = var_export($_POST['admin'] == admin, true);
-	$query = "INSERT INTO \"user\"(email, password, admin)
-	VALUES('".$_POST['email']."', '".$_POST['password']."', '".$adminVal."');";
+    $adminVal = $_POST['admin'] == "admin" ? 1 : 0;
+	$query = "INSERT INTO profile(email, password, first_name, last_name, admin)
+	VALUES('".$_POST['email']."', '".$_POST['password']."', '', '', '".$adminVal."');";
 	$result = pg_query($query);
+    echo $query;
 	if ($result) {
 		$_SESSION['email'] = $_POST['email'];
 		directToHomePage();

@@ -86,10 +86,13 @@ Currently identified problems:
 - Searches are still minimal
   - Include search by source/destination? user? price?
   - Applicable for all views
-- Users can still book their own trip (heh)
 - Results are by per-seat basis (each seat has a different record)
   - We might want to combine some search results into 1 record with the running seat count instead
   - I think this is mainly applicable for index.php and mytrips.php only
 - mybookings.php might want to include more trip details
 
 - <s>Bookings cannot be cancelled (are we implementing this?)</s>
+
+Solved problems:
+- Login page is not styled
+- Users can still book their own trip (heh)

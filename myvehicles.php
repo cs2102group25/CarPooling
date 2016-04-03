@@ -18,7 +18,6 @@ if (isset($_POST['addVehicle'])) {
 
     $addOwnershipQuery = "INSERT INTO ownership (email, car_plate, expiration) VALUES('".$_SESSION['email']."', '".$_POST['car_plate']."', '".$_POST['expiration']."');";
     $addOwnershipResult = pg_query($addOwnershipQuery);
-    if(!$addOwnershipResult || !$addCarResult) exit("There's error in adding car result");
 }
 
 if(isset($_POST['deleteVehicle'])) {
@@ -34,7 +33,6 @@ if(isset($_POST['deleteVehicle'])) {
     $delCarQuery = "DELETE FROM Car WHERE car_plate='".$_POST['deleteVehicle']."'";
     $delCarResult = pg_query($delCarQuery);
 
-    if(!$delOwnershipResult || !$delBookingResult || !$delTripResult || !$delCarResult) exit("There's error in deleting vehicles");
 }
 ?>
     <table class="resultTable">
@@ -122,6 +120,14 @@ if(isset($_POST['deleteVehicle'])) {
             echo "<div class='alert alert-success'>Vehicle added!</div>";
         } else {
             echo "<div class='alert alert-warning'>Please set all fields</div>";
+        }
+    }
+    
+    if (isset($_POST['deleteVehicle'])) {
+        if ($delOwnershipResult && $delBookingResult && $delTripResult && $delCarResult) {
+            echo "<div class='alert alert-success'>Vehicle deleted!</div>";
+        } else {
+            echo "<div class='alert alert-warning'>Error deleting vehicle.</div>";
         }
     }
     ?>

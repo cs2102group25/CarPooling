@@ -14,13 +14,13 @@ $title = "Sign up";
         $posted = isset($_POST['sign-up'], $_POST['email'], $_POST['password']);
         if ($posted) {
             
-            $adminVal = var_export($_POST['admin'] == admin, true);
+            $adminVal = var_export($_POST['admin'] == 'admin', true);
             $query = "INSERT INTO \"user\"(email, password, admin)
             VALUES('".$_POST['email']."', '".$_POST['password']."', '".$adminVal."');";
             $result = pg_query($query);
             if ($result) {
                 $_SESSION['email'] = $_POST['email'];
-                if ($adminVal) {
+                if ($_POST['admin'] == admin) {
                     $_SESSION['admin'] = true;
                 }
                 directToHomePage();

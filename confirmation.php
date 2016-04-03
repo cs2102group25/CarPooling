@@ -33,7 +33,7 @@ session_start();
     $totalPrice = 0;
     for ($i = 0; $i < $tripCount; $i++) {
         $car_info = explode("_", $_POST['trip'][$i]);
-        $carCostQuery = "SELECT p.price FROM provides_trip p WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1] AND p.start_time = '".date('Y-m-d h:i:s', $car_info[2])."';";
+        $carCostQuery = "SELECT p.price FROM provides_trip p WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1] AND p.start_time = '".date('Y-m-d H:i:s', $car_info[2])."';";
         $carCostResult = pg_query($carCostQuery);
         $line = pg_fetch_row($carCostResult);
         $totalPrice += $line[0];
@@ -49,7 +49,7 @@ session_start();
     // handle booking here
     for ($i = 0; $i < $tripCount; $i++) {
         $car_info = explode("_", $_POST['trip'][$i]);
-        $bookingQuery = "INSERT INTO booking (seat_no, car_plate, start_time, email, time) VALUES ('$car_info[1]', $car_info[0], '".date('Y-m--d h:i:s', $car_info[2])."', '".$_SESSION['email']."', '$transactionTime');";
+        $bookingQuery = "INSERT INTO booking (seat_no, car_plate, start_time, email, time) VALUES ('$car_info[1]', $car_info[0], '".date('Y-m--d H:i:s', $car_info[2])."', '".$_SESSION['email']."', '$transactionTime');";
         $bookingResult = pg_query($bookingQuery);
         if (!$bookingResult || pg_affected_rows($bookingResult) != 1) {
             exit("Error occurred while booking.");

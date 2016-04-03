@@ -65,6 +65,8 @@ $title = "Home";
                 <a href="<?=$searchLink?>&page=<?=$allRowsCount/$rowsPerPage|0+1?>">&gt;&gt;</a>
             </span>
         </form>
+        
+        <form method='post' action="payment.php">
         <div class='container' style="margin: 10px 0"><div class='row'>
         <?php 
         $arrayTitle = ["Selected", "From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle"];
@@ -97,7 +99,6 @@ $title = "Home";
     </td> </tr>
 
     <tr> <td>
-        <form method='post' action="payment.php">
         <?php
             require_once 'libs.php';
 
@@ -106,10 +107,6 @@ $title = "Home";
             }
 
             echo "<button type='submit'>Book</button>";
-            // Booking Functions
-            if (isset($_POST['book'])) {
-                
-            }
             pg_close($dbconn);
         ?>
         </form>

@@ -25,7 +25,7 @@ $title = "My Trips";
           for ($i = 0; $i < $_POST['seats']; $i++) {
             $startTime = $_POST['date']." ".$_POST['time'];
             date_default_timezone_set('Asia/Singapore');
-            $endTime = date('Y-m-d HH:i:s', strtotime("+".$_POST['duration']." minutes", strtotime($startTime)));
+            $endTime = date('Y-m-d H:i:s', strtotime("+".$_POST['duration']." minutes", strtotime($startTime)));
             $addQuery = "INSERT INTO provides_trip(seat_no, car_plate, price, start_time, end_time, start_loc, end_loc, posted)
             VALUES(".($i+1).", '".$_POST['vehicle']."', '".$_POST['price']."', '".$startTime."', '$endTime', '".$_POST['pick-up']."', '".$_POST['drop-off']."', 'true')";
 
@@ -144,7 +144,7 @@ $title = "My Trips";
                 Date
             </div>
             <div class="col-lg-8 col-md-8">
-                <input id="datepicker" type="text" name="date"/>
+                <input id="datepicker" type="text" name="date" data-date-format="yyyy-mm-dd"/>
             </div>
         </div>
         <div class="row">
@@ -154,7 +154,7 @@ $title = "My Trips";
             <div class="col-lg-8 col-md-8">
                 <input type="text" name="time" value="<?php 
                                                       date_default_timezone_set('Asia/Singapore');
-                                                      echo date('HH:i:s', time()); ?>"/>
+                                                      echo date('H:i:s', time()); ?>"/>
             </div>
         </div>
         <div class="row">
@@ -226,7 +226,9 @@ $title = "My Trips";
       </tr>
 </table>
 <script>
-$('#datepicker').datepicker();
+$('#datepicker').datepicker({
+    dateFormat: 'yyyy-mm-dd'
+});
 </script>
   
 </body>

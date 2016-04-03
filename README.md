@@ -70,6 +70,7 @@ CREATE TABLE Ownership(
   email VARCHAR(32),
   car_plate VARCHAR(10),
   expiration DATE NOT NULL,
+  deleted BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY(email, car_plate),
   FOREIGN KEY(email) REFERENCES "user"(email),
   FOREIGN KEY(car_plate) REFERENCES Car(car_plate)

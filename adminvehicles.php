@@ -3,7 +3,7 @@
 <body>
 <?php
 session_start();
-$title = "My Vehicles";
+$title = "All Vehicles";
 require_once 'php/sqlconn.php';
 require_once 'libs.php';
 require_once 'header.php';
@@ -11,12 +11,15 @@ require_once 'menu.php';
 if (!isset($_SESSION['email'])) {
     directToLoginPage();
 }
+if (!isset($_SESSION['admin'])) {
+    directToMyVehicles();
+}
 
 if (isset($_POST['addVehicle'])) {
     $addCarQuery = "INSERT INTO car (car_plate, model) VALUES('".$_POST['car_plate']."', '".$_POST['model']."');";
     $addCarResult = pg_query($addCarQuery);
 
-    $addOwnershipQuery = "INSERT INTO ownership (email, car_plate, expiration) VALUES('".$_SESSION['email']."', '".$_POST['car_plate']."', '".$_POST['expiration']."');";
+    $addOwnershipQuery = "INSERT INTO ownership (email, car_plate, expiration) VALUES('".$_POST['email']."', '".$_POST['car_plate']."', '".$_POST['expiration']."');";
     $addOwnershipResult = pg_query($addOwnershipQuery);
 }
 
@@ -40,15 +43,16 @@ if(isset($_POST['deleteVehicle'])) {
             <td>
                 <?php
                 echo "<div class='container'>";
-                $vehicleQuery = "SELECT c.car_plate, c.model, c.expiration FROM car c, ownership o WHERE c.car_plate = o.car_plate AND o.email = '".$_SESSION['email']."';";
+                $vehicleQuery = "SELECT o.email, c.car_plate, c.model, o.expiration FROM car c, ownership o WHERE c.car_plate = o.car_plate;";
 
-                $arrayTitle = ['Plate No.', 'Model', 'Expiration', 'Delete'];
+                $arrayTitle = ['User', 'Plate No.', 'Model', 'Expiration', 'Delete'];
                 echo "<div class='row result'>";
 
                 echo "<div class='col-md-3'>".$arrayTitle[0]."</div>";
-                echo "<div class='col-md-3'>".$arrayTitle[1]."</div>";
+                echo "<div class='col-md-2'>".$arrayTitle[1]."</div>";
                 echo "<div class='col-md-3'>".$arrayTitle[2]."</div>";
-                echo "<div class='col-md-3'>".$arrayTitle[3]."</div>";
+                echo "<div class='col-md-2'>".$arrayTitle[3]."</div>";
+                echo "<div class='col-md-2'>".$arrayTitle[4]."</div>";
 
                 echo "</div>";
 
@@ -61,15 +65,16 @@ if(isset($_POST['deleteVehicle'])) {
 
                         echo "<div class='row result'>";
                         echo "<div class='col-md-3'>".$row[0]."</div>";
-                        echo "<div class='col-md-3'>".$row[1]."</div>";
+                        echo "<div class='col-md-2'>".$row[1]."</div>";
                         echo "<div class='col-md-3'>".$row[2]."</div>";
-                        echo "<div class='col-md-3'><form method='post' action='myvehicles.php'>
-                        <button type='submit' name='deleteVehicle' value='".$row[0]."'>Delete</button></form></div>";
+                        echo "<div class='col-md-2'>".$row[3]."</div>";
+                        echo "<div class='col-md-2'><form method='post' action='".htmlspecialchars($_SERVER['PHP_SELF'])."'>
+                        <button type='submit' name='deleteVehicle' value='".$row[1]."'>Delete</button></form></div>";
                         echo "</div>";
                     }
                 } else {
                     echo "<div class='row result'>";
-                    echo "<div class='col-md-12'>You have no vehicles.</div>";
+                    echo "<div class='col-md-12'>No vehicles found.</div>";
                     echo "</div>";
                 }
 
@@ -79,8 +84,7 @@ if(isset($_POST['deleteVehicle'])) {
         </tr>
         <tr>
             <td>
-                Add new vehicle
-                <form method="post" action="myvehicles.php">
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                     <div class="addInfo">
                         <div class="row">
                             <div class="col-lg-4 col-md-4">
@@ -96,6 +100,14 @@ if(isset($_POST['deleteVehicle'])) {
                             </div>
                             <div class="col-lg-8 col-md-8">
                                 <input type="text" name="model" placeholder="Model"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4">
+                                User's email
+                            </div>
+                            <div class="col-lg-8 col-md-8">
+                                <input type="text" name="email" placeholder="User email"/>
                             </div>
                         </div>
                         <div class="row">

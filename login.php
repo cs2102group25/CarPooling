@@ -21,11 +21,11 @@ if (isset($_POST['login'])) {
                 $row = pg_fetch_row($loginResult);
                 $_SESSION['email'] = $email;
                 $db_admin = $row[0];
-
-                if ($db_admin == 0) {
+                if ($db_admin == 'f') {
                     directToHomePage();
-                } else if($db_admin == 1) {
-                    directToAdminPage();
+                } else if($db_admin == 't') {
+                    $_SESSION['admin'] = true;
+                    directToHomePage();
                 }
             }
         }
@@ -54,7 +54,7 @@ pg_close($dbconn);
                     if (isset($_POST['email']) && isset($_POST['password'])) {
                         if (pg_num_rows($userResult) == 0) {
                             echo 'Username not found.';
-                        } else if (!$loginResult == 0) {
+                        } else if (pg_num_rows($loginResult) == 0) {
                             echo 'Incorrect password.';
                         }
                     }

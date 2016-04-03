@@ -7,11 +7,11 @@ $title = "Home";
 <head>
 	<title>CS2102 Car Pooling</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
+    <?php require_once 'header.php'; ?>
 </head>
 
 <body>
-    <?php 
-    require_once 'header.php';
+    <?php
     require_once 'menu.php';
     require_once 'php/sqlconn.php';
     require_once 'libs.php';
@@ -115,5 +115,5 @@ $title = "Home";
 </form>
 </table>
 </body>
-    <?php require_once 'footer.php'; ?>
+<?php require_once 'footer.php'; ?>
 </html>

@@ -82,7 +82,6 @@ Currently identified problems:
 - Vehicles cannot be deleted even when they are not used
 - Error messages when trying to add/delete <s>trips</s> anything are not specific enough
   - e.g. trips that are already booked cannot be deleted
-- Login page is not styled
 - Admin does not have rights to delete any records
 - Searches are still minimal
   - Include search by source/destination? user? price?

@@ -30,6 +30,7 @@ body {
 }
 
 .container {
+    background-color: #fafafa;
 	border-right: 1px solid #000 !important;
 	border-top: 1px solid #000 !important;
 }

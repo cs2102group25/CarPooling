@@ -33,11 +33,11 @@ $title = "Login";
                         $row = pg_fetch_row($loginResult);
                         $_SESSION['email'] = $email;
                         $db_admin = $row[0];
-
-                        if ($db_admin == 0) {
+                        if ($db_admin == 'f') {
                             directToHomePage();
-                        } else if($db_admin == 1) {
-                            directToAdminPage();
+                        } else if($db_admin == 't') {
+                            $_SESSION['admin'] = true;
+                            directToHomePage();
                         }
                     }
                 }
@@ -65,11 +65,11 @@ $title = "Login";
         <hr>
         <div class="form-group">
             <label for="email">Email Address</label>
-            <input class="form-control type="text" placeholder="Enter email" name="email" id="email"/>
+            <input class="form-control" type="text" placeholder="Enter email" name="email" id="email"/>
         </div>
         <div class="form-group">
             <label for="pass">Password</label>
-            <input class="form-control type="password" placeholder="Password" name="password" id="pass"/>
+            <input class="form-control" type="password" placeholder="Password" name="password" id="pass"/>
         </div>
         <div class="checkbox">
             <label>
@@ -77,11 +77,11 @@ $title = "Login";
                 Remember me
             </label>
         </div>
-        <button type="submit" class="btn btn-primary" name="login" value="Login"/>Login</button>
+        <button type="submit" class="btn btn-primary" name="login" value="Login">Login</button>
 	</form>
     Have no account? <a href="signup.php" class="button right">Sign up</a>
     </div>
     </div>
-<?php require_once 'footer.php'; ?>
 </body>
+<?php require_once 'footer.php'; ?>
 </html>

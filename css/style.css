@@ -9,6 +9,10 @@ html, body {
 	text-align: center;
 }
 
+.pageTitle {
+    font-size: 15px;
+}
+
 .row {
 	display: flex !important;
 }

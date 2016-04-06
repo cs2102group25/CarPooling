@@ -9,10 +9,7 @@ $title = "My Trips";
     <?php 
         require_once 'menu.php';
         if (!isset($_SESSION['email'])) {
-          redirectToLoginPage();
-        }
-        if (isset($_SESSION['admin'])) {
-          redirectToAdminTrips();
+          directToLoginPage();
         }
 
         // Add Functions

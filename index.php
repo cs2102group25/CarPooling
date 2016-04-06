@@ -10,11 +10,16 @@ $title = "Home";
     
     $rowsPerPage = 50;
     if (isset($_SESSION['email']) && !isset($_GET['searchWithOwnTrips'])) {
-        $includeSelf = false;
         $query = "SELECT * FROM provides_trip t, ownership o WHERE t.car_plate = o.car_plate AND o.email <> '".$_SESSION['email']."'";
     } else {
-        $includeSelf = true;
         $query = "SELECT * FROM provides_trip t WHERE TRUE";
+    }
+    if (isset($_SESSION['email'])) {
+        if (isset($_GET['searchForTrip'])) {
+            $includeSelf = $_GET['searchWithOwnTrips'];
+        } else {
+            $includeSelf = false;
+        }
     }
     if (isset($_GET['searchForTrip'])) {
         if ($_GET['searchLocation']) {
@@ -47,7 +52,10 @@ $title = "Home";
             <form method='get' action="index.php">
                 Location: <input type="text" name="searchLocation" id="searchLocation" placeholder="Location"/>
                 Maximum price: <input type="number" name="searchMaxPrice" id="searchMaxPrice" min="0"/>
-                Include my trips: <input type="checkbox" name="searchWithOwnTrips" id="searchWithOwnTrips" <?=$includeSelf?'checked':''?>/>
+                <?php if (isset($_SESSION['email'])) {
+    echo 'Include my trips: <input type="checkbox" name="searchWithOwnTrips" id="searchWithOwnTrips" '.($includeSelf?'checked':'').'/>';
+}
+    ?>
                 <input type="submit" name="searchForTrip" value="Search">
                 <span style="float:right">
                     <?php

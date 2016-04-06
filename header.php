@@ -2,6 +2,8 @@
     session_start();
     require_once 'php/sqlconn.php';
     require_once 'libs.php';
+
+    date_default_timezone_set('Asia/Singapore');
 ?>
 <head>
     <title>CS2102 Car Pooling</title>

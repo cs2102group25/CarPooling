@@ -4,16 +4,15 @@ session_start();
 $title = "My Trips";
 ?>
 <html>
-<head>
-	<title>CS2102 Car Pooling</title>
-</head>
-
-<body>
+<?php require_once 'header.php'?>
+    <body>
     <?php 
-    require_once 'header.php';
-    require_once 'menu.php';
+        require_once 'menu.php';
         if (!isset($_SESSION['email'])) {
-          exit;
+          redirectToLoginPage();
+        }
+        if (isset($_SESSION['admin'])) {
+          redirectToAdminTrips();
         }
 
         // Add Functions
@@ -21,7 +20,6 @@ $title = "My Trips";
          $_POST['price'], $_POST['vehicle'])) {
           for ($i = 0; $i < $_POST['seats']; $i++) {
             $startTime = $_POST['date']." ".$_POST['time'];
-            date_default_timezone_set('Asia/Singapore');
             $endTime = date('Y-m-d H:i:s', strtotime("+".$_POST['duration']." minutes", strtotime($startTime)));
             $addQuery = "INSERT INTO provides_trip(seat_no, car_plate, price, start_time, end_time, start_loc, end_loc, posted)
             VALUES(".($i+1).", '".$_POST['vehicle']."', '".$_POST['price']."', '".$startTime."', '$endTime', '".$_POST['pick-up']."', '".$_POST['drop-off']."', 'true')";
@@ -38,6 +36,8 @@ $title = "My Trips";
             SELECT o.car_plate FROM ownership o WHERE p.car_plate = '$car_info[0]' AND p.seat_no = $car_info[1] AND p.start_time = '$car_info[2]' AND p.car_plate = o.car_plate AND o.email = '".$_SESSION['email']."');";
             $deleteResult = pg_query($deleteQuery);
             $rowsDeleted = pg_affected_rows($deleteResult);
+            
+            if (!$deleteResult) $deleteError = true;
         }
     ?>
 	
@@ -46,11 +46,9 @@ $title = "My Trips";
       <td>
         <form method='post'>
         <?php 
-          require_once 'php/sqlconn.php';
           $arrayTitle = ["From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle", "Actions"];    
           $query = 'SELECT * FROM provides_trip p, ownership o WHERE p.car_plate = o.car_plate AND o.email =\''.$_SESSION['email'].'\'';
           
-
           $result = pg_query($query) or die('Query failed: '.pg_last_error());
           $resultCount = pg_num_rows($result);
 
@@ -87,147 +85,135 @@ $title = "My Trips";
             echo "</div>";
          }
          pg_free_result($result);
-      ?>
-    </form>
-  </td> </tr>
-
-  <tr> <td>
-    Add new trip
-    <form method="post" action="mytrips.php">
-    <div class="addTrip">
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Vehicle
-            </div>
-            <div class="col-lg-8 col-md-8">
-                    <?php
-                    $vehicleQuery = "SELECT c.car_plate, c.model FROM car c, ownership o WHERE '".$_SESSION['email']."' = o.email AND o.car_plate = c.car_plate;";
-                    $vehicleResult = pg_query($vehicleQuery)or die('Query failed: '.pg_last_error());;
-                    $numRows = pg_num_rows($vehicleResult);
-                    
-                    if ($numRows > 0) {
-                        echo "<select name='vehicle'>";
-                        for ($i = 0; $i < $numRows; $i++) {
-                            $curVehicle = pg_fetch_row($vehicleResult);
-                            echo "<option value='".$curVehicle[0]."' >".$curVehicle[0]." (".$curVehicle[1].")"."</option>";
-                        }
-                        echo "</select>";
-                    } else {
-                        echo "<select disabled>";
-                        echo "<option>Add a vehicle first!</option>";
-                        echo "</select>";
-                    }
-                    ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Pick-up Point
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input type="text" name="pick-up" placeholder="Pick-up" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Drop-off Point
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input type="text" name="drop-off" placeholder="Drop-off"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Date
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input id="datepicker" type="text" name="date" data-date-format="yyyy-mm-dd"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Starting time
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input type="text" name="time" value="<?php 
-                                                      date_default_timezone_set('Asia/Singapore');
-                                                      echo date('H:i:s', time()); ?>"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Estimated Duration (minutes)
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input type="text" name="duration" value="30"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Seats available
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input type="number" name="seats" value=1 min=1 />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-4">
-                Price
-            </div>
-            <div class="col-lg-8 col-md-8">
-                <input type="text" name="price" value="0" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12 col-md-12">
-                <input type="submit" name="add" value="Add" />
-            </div>
-        </div>
-    </div>
-    </form>
-
-    <?php require_once 'php/sqlconn.php';
-        require_once 'libs.php';
-
-        if (!isset($_SESSION['email'])) {
-          exit;
-        }
-
-        // add status
-        if (isset($_POST['add'])) {
-          if (isset($_POST['pick-up'], $_POST['drop-off'], $_POST['time'], $_POST['duration'], $_POST['seats'],
-             $_POST['price'], $_POST['vehicle'])) {
-             if (!$addError) {
-               echo "<div class='alert alert-success'>Trip added!</div>";
-             }  else {
-               echo "<div class='alert alert-danger'>Error adding trip.</div>";
-             }
-           } else {
-             echo "<div class='alert alert-warning'>Please fill in all fields.</div>";
-           }
-        }
-
-        // delete status
-        if (isset($_POST['delete'])) {
-          if ($deleteResult && $rowsDeleted > 0) {
-            echo "<div class='alert alert-success'>Trip deleted!</div>";
-          } else {
-            echo "<div class='alert alert-danger'>Error deleting trip.</div>";
-          }
-        }
-    ?>
-    <?php
-    pg_close($dbconn);
-    ?>
+        ?>
+        </form>
       </td>
-      </tr>
+    </tr>
+
+    <tr>
+      <td>
+        <form method="post" action="mytrips.php">
+        <div class="addTrip container">
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    Vehicle
+                </div>
+                <div class="col-lg-8 col-md-8">
+                        <?php
+                        $vehicleQuery = "SELECT c.car_plate, c.model FROM car c, ownership o WHERE '".$_SESSION['email']."' = o.email AND o.car_plate = c.car_plate;";
+                        $vehicleResult = pg_query($vehicleQuery)or die('Query failed: '.pg_last_error());
+                        $numVehicles = pg_num_rows($vehicleResult);
+
+                        if ($numVehicles > 0) {
+                            echo "<select name='vehicle'>";
+                            for ($i = 0; $i < $numVehicles; $i++) {
+                                $curVehicle = pg_fetch_row($vehicleResult);
+                                echo "<option value='".$curVehicle[0]."'>".$curVehicle[0]." (".$curVehicle[1].")"."</option>";
+                            }
+                            echo "</select>";
+                        } else {
+                            echo "<select disabled>";
+                            echo "<option>Add a vehicle first!</option>";
+                            echo "</select>";
+                        }
+                        ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    Pick-up Point
+                </div>
+                <div class="col-lg-8 col-md-8">
+                    <input type="text" name="pick-up" placeholder="Pick-up" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    Drop-off Point
+                </div>
+                <div class="col-lg-8 col-md-8">
+                    <input type="text" name="drop-off" placeholder="Drop-off" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    Date
+                </div>
+                <div class="col-lg-8 col-md-8">
+                    <input id="datepicker" type="text" name="date" data-date-format="yyyy-mm-dd" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    Starting time
+                </div>
+                <div class="col-lg-8 col-md-8">
+                    <input type="text" name="time" value="<?=date('H:i:s', time())?>"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    Estimated Duration (minutes)
+                </div>
+                <div class="col-lg-8 col-md-8">
+                    <input type="text" name="duration" value="30"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    Seats available
+                </div>
+                <div class="col-lg-8 col-md-8">
+                    <input type="number" name="seats" value=1 min=1 />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    Price
+                </div>
+                <div class="col-lg-8 col-md-8">
+                    <input type="text" name="price" value="0" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <input type="submit" name="add" value="Add" />
+                </div>
+            </div>
+        </div>
+        </form>
+
+        <?php
+            // add status
+            if (isset($_POST['add'])) {
+              if (isset($_POST['pick-up'], $_POST['drop-off'], $_POST['time'], $_POST['duration'], $_POST['seats'],
+                 $_POST['price'], $_POST['vehicle'])) {
+                 if (!$addError) {
+                   echo "<div class='alert alert-success'>Trip added!</div>";
+                 }  else {
+                   echo "<div class='alert alert-danger'>Error adding trip.</div>";
+                 }
+               } else {
+                 echo "<div class='alert alert-warning'>Please fill in all fields.</div>";
+               }
+            }
+
+            // delete status
+            if (isset($_POST['delete'])) {
+              if (!$deleteError && $rowsDeleted > 0) {
+                echo "<div class='alert alert-success'>Trip deleted!</div>";
+              } else {
+                echo "<div class='alert alert-danger'>Error deleting trip.</div>";
+              }
+            }
+            pg_close($dbconn);
+        ?>
+      </td>
+    </tr>
 </table>
 <script>
-$('#datepicker').datepicker({
-    dateFormat: 'yyyy-mm-dd'
-});
+$('#datepicker').datepicker();
 </script>
-  
 </body>
 <?php require_once 'footer.php'; ?>
 </html>

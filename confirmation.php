@@ -47,7 +47,7 @@ session_start();
     // handle booking here
     for ($i = 0; $i < $tripCount; $i++) {
         $car_info = explode("_", $_POST['trip'][$i]);
-        $bookingQuery = "INSERT INTO booking (seat_no, car_plate, start_time, email, time) VALUES ('$car_info[1]', $car_info[0], '".date('Y-m--d H:i:s', $car_info[2])."', '".$_SESSION['email']."', '$transactionTime');";
+        $bookingQuery = "INSERT INTO booking (seat_no, car_plate, start_time, email, time) VALUES ($car_info[1], '$car_info[0]', '".date('Y-m-d H:i:s', $car_info[2])."', '".$_SESSION['email']."', '$transactionTime');";
         $bookingResult = pg_query($bookingQuery);
         if (!$bookingResult || pg_affected_rows($bookingResult) != 1) {
             exit("Error occurred while booking.");

@@ -20,8 +20,13 @@ html, body {
 .resultTable {
 	padding: 30px !important;
 	width: 100%;
-	background-color: white;
 	display: block;
+}
+
+.recordTable {
+    margin-top: 10px;
+	border-right: 1px solid #000 !important;
+	border-top: 1px solid #000 !important;
 }
 
 .addInfo {
@@ -31,12 +36,6 @@ html, body {
 	border-top: 1px solid #000 !important;
     width: 50% !important;
     text-align: left !important;
-}
-
-.container {
-    background-color: #fafafa;
-	border-right: 1px solid #000 !important;
-	border-top: 1px solid #000 !important;
 }
 
 .header {

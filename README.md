@@ -61,6 +61,7 @@ CREATE TABLE Booking(
   start_time TIMESTAMP,
   email VARCHAR(32),
   time TIMESTAMP,
+  UNIQUE(seat_no, car_plate, start_time),
   PRIMARY KEY(seat_no, car_plate, start_time, email, time),
   FOREIGN KEY (seat_no, car_plate, start_time) REFERENCES Provides_Trip(seat_no, car_plate, start_time),
   FOREIGN KEY(email, time) REFERENCES Make_Transaction(email, time)

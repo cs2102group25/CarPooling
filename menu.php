@@ -4,9 +4,7 @@
             <div class='col-md-12'>
                     <a href="index.php"><b>Car Pooling</b></a>
                 <span class="pageTitle">
-                    <?php
-                    if ($title)
-                        echo $title;?>
+                    <?php if ($title) echo $title; ?>
                 </span>
             </div>
         </div>
@@ -29,9 +27,6 @@
         ?>
             </div>
         </div>
-        
-    
-        
     </div>
     
     <div style="float:right;">

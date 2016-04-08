@@ -12,8 +12,8 @@ require_once 'menu.php';
 if (!isset($_SESSION['email'])) {
     directToLoginPage();
 }
-echo "<table class='resultTable'><tr><td>";
-echo "<div class='container'>";
+echo "<table class='resultTable table table-striped table-bordered table-hover'><tr><td>";
+echo "<div class='container recordTable'>";
 $bookingQuery = "SELECT p.start_time, p.end_time, p.start_loc, p.end_loc FROM provides_trip p, make_transaction m, booking b WHERE m.email = '".$_SESSION['email']."' AND m.time = b.time AND m.email = b.email AND b.car_plate = p.car_plate AND b.seat_no = p.seat_no AND b.start_time = p.start_time ORDER BY p.start_time;";
 $bookingResult = pg_query($bookingQuery);
     

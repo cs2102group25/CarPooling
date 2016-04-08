@@ -10,9 +10,19 @@ $title = "Home";
     
     $rowsPerPage = 50;
     if (isset($_SESSION['email']) && !isset($_GET['searchWithOwnTrips'])) {
-        $query = "SELECT * FROM provides_trip t, ownership o WHERE t.car_plate = o.car_plate AND o.email <> '".$_SESSION['email']."'";
+        $query = "SELECT * 
+        FROM provides_trip t, ownership o 
+        WHERE NOT EXISTS (
+            SELECT * FROM booking b
+            WHERE b.seat_no = t.seat_no AND b.car_plate = t.car_plate AND b.start_time = t.start_time
+            ) 
+        AND t.car_plate = o.car_plate 
+        AND o.email <> '".$_SESSION['email']."'";
     } else {
-        $query = "SELECT * FROM provides_trip t WHERE TRUE";
+        $query = "SELECT * FROM provides_trip t WHERE NOT EXISTS (
+            SELECT * FROM booking b
+            WHERE b.seat_no = t.seat_no AND b.car_plate = t.car_plate AND b.start_time = t.start_time
+            );";
     }
     if (isset($_SESSION['email'])) {
         if (isset($_GET['searchForTrip'])) {
@@ -45,7 +55,7 @@ $title = "Home";
     }
     ?>
 
-    <table class="resultTable">
+    <table class="resultTable table table-striped table-bordered table-hover">
       <tr>
         <td>
             <!-- search filters and page navigator -->
@@ -78,7 +88,7 @@ $title = "Home";
 
             <!-- booking form -->
             <form method='post' action="payment.php">
-            <div class='container' style="margin: 10px 0">
+            <div class='container recordTable'>
                 <div class='row'>
                 <?php 
                 $arrayTitle = ["Selected", "From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle"];
@@ -94,7 +104,7 @@ $title = "Home";
                 <?php
                 if ($hasError || $allRowsCount == 0) {
                     echo "<div class='row'>";
-                    echo "<div class='col-lg-12 col-md-12 result'>No rows found.</div>";
+                    echo "<div class='col-lg-12 col-md-12 result'>No bookings found. Click <a href='mytrips.php'>here</a> to advertise yours!</div>";
                     echo "</div>";
                 } else {
                     while ($line = pg_fetch_row($result)) {

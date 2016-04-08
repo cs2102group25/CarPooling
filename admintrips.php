@@ -9,8 +9,8 @@ $title = "All Trips";
     require_once 'header.php';
     require_once 'menu.php';
 
-        if (!isset($_SESSION['email'])) {
-          exit;
+        if (!isset($_SESSION['admin'])) {
+          directToMyTrips();
         }
 
         // Add Functions
@@ -44,8 +44,8 @@ $title = "All Trips";
         <form method='post'>
         <?php 
           require_once 'php/sqlconn.php';
-          $arrayTitle = ["From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle", "Actions"];    
-          $query = 'SELECT * FROM provides_trip p, ownership o WHERE p.car_plate = o.car_plate';
+          $arrayTitle = ["User", "From", "To", "Start Time", "End Time", "Seat No.", "Price", "Vehicle", "Actions"];    
+          $query = 'SELECT u.email, p.start_loc, p.end_loc, p.start_time, p.end_time, p.seat_no, p.price, p.car_plate FROM provides_trip p, ownership o, "user" u WHERE o.car_plate = p.car_plate AND o.email = u.email';
           
 
           $result = pg_query($query) or die('Query failed: '.pg_last_error());
@@ -53,7 +53,7 @@ $title = "All Trips";
 
           echo "<div class='container recordTable'><div class='row'>";	
           for ($i = 0; $i < count($arrayTitle); $i++) {
-            if ($i == 0 || $i == 1 || $i == 2 || $i == 3) {
+            if ($i == 0 || $i == 1 || $i == 2) {
               echo "<div class='col-lg-2 col-md-2 result'>".$arrayTitle[$i]."</div>";
             } else {
               echo "<div class='col-lg-1 col-md-1 result'>".$arrayTitle[$i]."</div>";
@@ -63,19 +63,22 @@ $title = "All Trips";
 
          if ($resultCount > 0) {
            while ($line = pg_fetch_row($result)) {
+               
              echo "<div class='row'>";
-             echo "<div class='col-lg-2 col-md-2 result'>".$line[5]."</div>";	
-             echo "<div class='col-lg-2 col-md-2 result'>".$line[6]."</div>";	
+             echo "<div class='col-lg-2 col-md-2 result'>".$line[0]."</div>";	
+             echo "<div class='col-lg-2 col-md-2 result'>".$line[1]."</div>";	
 
-             echo "<div class='col-lg-2 col-md-2 result'>".$line[3]."</div>";
-             echo "<div class='col-lg-2 col-md-2 result'>".$line[4]."</div>";
+             echo "<div class='col-lg-2 col-md-2 result'>".$line[2]."</div>";
+             echo "<div class='col-lg-2 col-md-1 result'>".$line[3]."</div>";
 
-             echo "<div class='col-lg-1 col-md-1 result'>".$line[0]."</div>";
+             echo "<div class='col-lg-1 col-md-1 result'>".$line[4]."</div>";
 
-             echo "<div class='col-lg-1 col-md-1 result'>".$line[2]."</div>";
+             echo "<div class='col-lg-1 col-md-1 result'>".$line[5]."</div>";
 
-             echo "<div class='col-lg-1 col-md-1 result'>".$line[1]."</div>";
-             echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=delete value='".$line[1]."_".$line[0]."_".$line[3]."'] >Delete</button></div>";
+             echo "<div class='col-lg-1 col-md-1 result'>".$line[6]."</div>";
+               
+             echo "<div class='col-lg-1 col-md-1 result'>".$line[7]."</div>";
+             echo "<div class='col-lg-1 col-md-1 result'><button type='submit' name=delete value='".$line[7]."_".$line[5]."_".$line[3]."'] >Delete</button></div>";
              echo "</div>";
            }
          } else {

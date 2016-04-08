@@ -28,7 +28,10 @@ if ($bookingResult && ($bookingCount = pg_num_rows($bookingResult)) > 0) {
 
         echo "<div class='row result'>";
         for ($i = 0; $i < count($arrayTitle); $i++ ) {
-            echo "<div class='col-md-3'>".$row[$i]."</div>";
+            echo "<div class='col-md-2'>".$row[$i]."</div>";
+            if ($i == 3 || $i == 4) {
+                echo "<div class='col-md-3'>".$row[$i]."</div>";
+            }
         }
         echo "</div>";
     }

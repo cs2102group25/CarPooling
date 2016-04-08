@@ -104,7 +104,7 @@ $title = "Home";
                 <?php
                 if ($hasError || $allRowsCount == 0) {
                     echo "<div class='row'>";
-                    echo "<div class='col-lg-12 col-md-12 result'>No bookings found. Click <a href='mytrips.php'>here</a> to advertise yours!</div>";
+                    echo "<div class='col-lg-12 col-md-12 result'>No trips found. Click <a href='mytrips.php'>here</a> to advertise yours!</div>";
                     echo "</div>";
                 } else {
                     while ($line = pg_fetch_row($result)) {

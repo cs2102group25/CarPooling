@@ -36,11 +36,11 @@ if(isset($_POST['deleteVehicle'])) {
 
 }
 ?>
-    <table class="resultTable">
+    <table class="resultTable table table-striped table-bordered table-hover">
         <tr>
             <td>
                 <?php
-                echo "<div class='container'>";
+                echo "<div class='container recordTable'>";
                 $vehicleQuery = "SELECT o.email, c.car_plate, c.model, o.expiration FROM car c, ownership o WHERE c.car_plate = o.car_plate;";
 
                 $arrayTitle = ['User', 'Plate No.', 'Model', 'Expiration', 'Delete'];

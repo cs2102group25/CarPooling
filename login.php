@@ -55,7 +55,7 @@ $title = "Login";
                 }
             ?>
             <form method="post" action="<?=htmlspecialchars($_SERVER['PHP_SELF'])?>">
-                <h2>Login Form</h2>
+                <h2>Login</h2>
                 <div class="form-group">
                     <label for="email">Email Address</label>
                     <input class="form-control" type="text" placeholder="Enter email" name="email" id="email"/>

@@ -22,7 +22,7 @@ $title = "Home";
         $query = "SELECT * FROM provides_trip t WHERE NOT EXISTS (
             SELECT * FROM booking b
             WHERE b.seat_no = t.seat_no AND b.car_plate = t.car_plate AND b.start_time = t.start_time
-            );";
+            )";
     }
     if (isset($_SESSION['email'])) {
         if (isset($_GET['searchForTrip'])) {

@@ -38,7 +38,7 @@ $title = "All Trips";
         }
     ?>
 	
-  <table class="resultTable">
+  <table class="resultTable table table-striped table-bordered table-hover">
     <tr>
       <td>
         <form method='post'>
@@ -51,7 +51,7 @@ $title = "All Trips";
           $result = pg_query($query) or die('Query failed: '.pg_last_error());
           $resultCount = pg_num_rows($result);
 
-          echo "<div class='container'><div class='row'>";	
+          echo "<div class='container recordTable'><div class='row'>";	
           for ($i = 0; $i < count($arrayTitle); $i++) {
             if ($i == 0 || $i == 1 || $i == 2 || $i == 3) {
               echo "<div class='col-lg-2 col-md-2 result'>".$arrayTitle[$i]."</div>";
